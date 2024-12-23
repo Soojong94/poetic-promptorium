@@ -17,6 +17,8 @@ import {
   PaginationNext,
   PaginationPrevious,
 } from "@/components/ui/pagination";
+import { DeleteAlert } from "./DeleteAlert";
+import { EditPoemDialog } from "./EditPoemDialog";
 
 type Poem = Database["public"]["Tables"]["poems"]["Row"];
 
@@ -55,7 +57,7 @@ export function PoemHistory() {
         .range((currentPage - 1) * ITEMS_PER_PAGE, currentPage * ITEMS_PER_PAGE - 1);
 
       if (error) throw error;
-      
+
       setPoems(data || []);
       setTotalPages(Math.ceil((count || 0) / ITEMS_PER_PAGE));
     } catch (error) {
@@ -139,6 +141,72 @@ export function PoemHistory() {
     }
     return items;
   };
+  const [deleteAlert, setDeleteAlert] = useState<{
+    isOpen: boolean;
+    poemId: string | null;
+    title: string;
+  }>({ isOpen: false, poemId: null, title: "" });
+
+  const [editDialog, setEditDialog] = useState<{
+    isOpen: boolean;
+    poem: Poem | null;
+  }>({ isOpen: false, poem: null });
+
+  const handleDeleteConfirm = async () => {
+    if (!deleteAlert.poemId) return;
+
+    try {
+      const { error } = await supabase
+        .from("poems")
+        .delete()
+        .eq("id", deleteAlert.poemId);
+
+      if (error) throw error;
+
+      toast({
+        title: "삭제 완료",
+        description: "시가 성공적으로 삭제되었습니다.",
+      });
+
+      fetchPoems();
+    } catch (error) {
+      console.error("Error deleting poem:", error);
+      toast({
+        title: "에러",
+        description: "시를 삭제하는데 실패했습니다. 다시 시도해주세요.",
+        variant: "destructive",
+      });
+    }
+
+    setDeleteAlert({ isOpen: false, poemId: null, title: "" });
+  };
+
+  const handleEditSave = async (title: string, content: string) => {
+    if (!editDialog.poem) return;
+
+    try {
+      const { error } = await supabase
+        .from("poems")
+        .update({ title, content, updated_at: new Date().toISOString() })
+        .eq("id", editDialog.poem.id);
+
+      if (error) throw error;
+
+      toast({
+        title: "수정 완료",
+        description: "시가 성공적으로 수정되었습니다.",
+      });
+
+      fetchPoems();
+    } catch (error) {
+      console.error("Error updating poem:", error);
+      toast({
+        title: "에러",
+        description: "시를 수정하는데 실패했습니다. 다시 시도해주세요.",
+        variant: "destructive",
+      });
+    }
+  };
 
   return (
     <motion.div
@@ -147,13 +215,8 @@ export function PoemHistory() {
       transition={{ duration: 0.5 }}
       className="space-y-4"
     >
-      <div className="flex justify-end mb-6">
-        <Button onClick={() => navigate("/")} className="gap-2">
-          <Plus className="w-4 h-4" />
-          New Poem
-        </Button>
-      </div>
-      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-2">
+
+      <div className="grid gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3"> {/* 그리드 열 수 조정 */}
         {poems.map((poem) => (
           <PoemCard
             key={poem.id}
@@ -161,8 +224,12 @@ export function PoemHistory() {
             content={poem.content}
             date={poem.created_at}
             onClick={() => navigate(`/poem/${poem.id}?page=${currentPage}`)}
-            onEdit={() => handleEditPoem(poem)}
-            onDelete={() => handleDeletePoem(poem.id)}
+            onEdit={() => setEditDialog({ isOpen: true, poem })} // 수정
+            onDelete={() => setDeleteAlert({  // 수정
+              isOpen: true,
+              poemId: poem.id,
+              title: poem.title
+            })}
             onAiEdit={() => handleAiEdit(poem)}
           />
         ))}
@@ -186,6 +253,22 @@ export function PoemHistory() {
             </PaginationItem>
           </PaginationContent>
         </Pagination>
+      )}
+      <DeleteAlert
+        isOpen={deleteAlert.isOpen}
+        onClose={() => setDeleteAlert({ isOpen: false, poemId: null, title: "" })}
+        onConfirm={handleDeleteConfirm}
+        title={deleteAlert.title}
+      />
+
+      {editDialog.poem && (
+        <EditPoemDialog
+          isOpen={editDialog.isOpen}
+          onClose={() => setEditDialog({ isOpen: false, poem: null })}
+          onSave={handleEditSave}
+          initialTitle={editDialog.poem.title}
+          initialContent={editDialog.poem.content}
+        />
       )}
     </motion.div>
   );

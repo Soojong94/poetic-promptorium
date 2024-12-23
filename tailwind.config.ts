@@ -18,6 +18,9 @@ export default {
 			}
 		},
 		extend: {
+			 fontFamily: {
+				'sans': ['Pacifico', 'ui-cursive', 'system-ui', '-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'Roboto', 'Helvetica Neue', 'Arial', 'Noto Sans', 'sans-serif']
+            },
 			colors: {
 				border: 'hsl(var(--border))',
 				input: 'hsl(var(--input))',

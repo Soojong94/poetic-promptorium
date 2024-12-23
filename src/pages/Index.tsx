@@ -13,24 +13,24 @@ const Index = () => {
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{ duration: 0.5 }}
-      className="min-h-screen p-6 md:p-8 lg:p-12 space-y-12 bg-background text-foreground"
+      className="p-8 md:p-10 lg:p-7 space-y-12 bg-background text-foreground" // space-y와 패딩 값 축소
     >
-      <div className="text-center space-y-4 mb-12">
-        <Heading>Poetry Studio</Heading>
-        <Subtitle>Create and preserve your poetic expressions</Subtitle>
+      <div className="text-center space-y-4 mb-10">
+        <Heading className="text-white">Poetry Studio</Heading>
+        <Subtitle className="text-gray-300">Create and preserve your poetic expressions</Subtitle>
       </div>
-      
+
       <div className="w-full max-w-4xl mx-auto">
         <Tabs defaultValue="editor" className="w-full mb-6">
           <TabsList className="grid w-full grid-cols-2">
-            <TabsTrigger 
-              value="editor" 
+            <TabsTrigger
+              value="editor"
               onClick={() => navigate("/")}
               className={location.pathname === "/" ? "data-[state=active]" : ""}
             >
               Write New Poem
             </TabsTrigger>
-            <TabsTrigger 
+            <TabsTrigger
               value="history"
               onClick={() => navigate("/history")}
               className={location.pathname === "/history" ? "data-[state=active]" : ""}

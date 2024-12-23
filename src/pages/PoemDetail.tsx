@@ -44,15 +44,16 @@ export default function PoemDetail() {
 
   return (
     <div className="min-h-screen p-6 md:p-8 lg:p-12 space-y-8 bg-background text-foreground">
+      {/* history 페이지로 이동하도록 수정 */}
       <Button
         variant="outline"
-        onClick={() => navigate(`/?page=${page}`)}
+        onClick={() => navigate(`/history?page=${page}`)}
         className="mb-8"
       >
         <ArrowLeft className="w-4 h-4 mr-2" />
         목록으로
       </Button>
-      
+
       <div className="max-w-2xl mx-auto space-y-6">
         <h1 className="text-3xl font-medium">{poem.title}</h1>
         <p className="text-sm text-muted-foreground">

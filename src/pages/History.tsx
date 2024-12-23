@@ -13,24 +13,24 @@ export default function History() {
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{ duration: 0.5 }}
-      className="min-h-screen p-6 md:p-8 lg:p-12 space-y-12 bg-background text-foreground"
+      className="p-6 md:p-8 lg:p-12 space-y-10 bg-background text-foreground" // space-y-12를 space-y-6으로 줄이고, lg:p-10을 lg:p-8로 줄임
     >
-      <div className="text-center space-y-4 mb-12">
+      <div className="text-center space-y-2 mb-10"> {/* space-y-4를 space-y-2로, mb-12를 mb-6으로 줄임 */}
         <Heading>Poetry Studio</Heading>
-        <Subtitle>Browse your poetic journey</Subtitle>
+        <Subtitle className="text-primary">Create and preserve your poetic expressions</Subtitle>
       </div>
-      
+
       <div className="max-w-4xl mx-auto">
         <Tabs defaultValue="history" className="w-full mb-6">
           <TabsList className="grid w-full grid-cols-2">
-            <TabsTrigger 
-              value="editor" 
+            <TabsTrigger
+              value="editor"
               onClick={() => navigate("/")}
               className={location.pathname === "/" ? "data-[state=active]" : ""}
             >
               Write New Poem
             </TabsTrigger>
-            <TabsTrigger 
+            <TabsTrigger
               value="history"
               onClick={() => navigate("/history")}
               className={location.pathname === "/history" ? "data-[state=active]" : ""}
