@@ -9,27 +9,99 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
-      poems: {
+      diary_entries: {
         Row: {
-          content: string
+          budget_available: number | null
+          budget_total: number | null
+          category: string | null
+          completion_percentage: number | null
+          content: string | null
           created_at: string
+          duration_type: string | null
+          duration_value: number | null
+          end_time: string | null
           id: string
+          priority: number | null
+          rewards_earned: number | null
+          start_time: string | null
+          status: string | null
+          success_criteria: string | null
+          target_date: string | null
           title: string
           updated_at: string
+          user_id: string
+          weekday_hours: number | null
+          weekend_hours: number | null
         }
         Insert: {
-          content: string
+          budget_available?: number | null
+          budget_total?: number | null
+          category?: string | null
+          completion_percentage?: number | null
+          content?: string | null
           created_at?: string
+          duration_type?: string | null
+          duration_value?: number | null
+          end_time?: string | null
           id?: string
+          priority?: number | null
+          rewards_earned?: number | null
+          start_time?: string | null
+          status?: string | null
+          success_criteria?: string | null
+          target_date?: string | null
           title: string
           updated_at?: string
+          user_id: string
+          weekday_hours?: number | null
+          weekend_hours?: number | null
         }
         Update: {
-          content?: string
+          budget_available?: number | null
+          budget_total?: number | null
+          category?: string | null
+          completion_percentage?: number | null
+          content?: string | null
           created_at?: string
+          duration_type?: string | null
+          duration_value?: number | null
+          end_time?: string | null
           id?: string
+          priority?: number | null
+          rewards_earned?: number | null
+          start_time?: string | null
+          status?: string | null
+          success_criteria?: string | null
+          target_date?: string | null
           title?: string
           updated_at?: string
+          user_id?: string
+          weekday_hours?: number | null
+          weekend_hours?: number | null
+        }
+        Relationships: []
+      }
+      user_characters: {
+        Row: {
+          character_type: string
+          created_at: string | null
+          id: string
+          unlocked_at: string | null
+          user_id: string
+        }
+        Insert: {
+          character_type: string
+          created_at?: string | null
+          id?: string
+          unlocked_at?: string | null
+          user_id: string
+        }
+        Update: {
+          character_type?: string
+          created_at?: string | null
+          id?: string
+          unlocked_at?: string | null
+          user_id?: string
         }
         Relationships: []
       }
