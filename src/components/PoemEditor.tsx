@@ -7,6 +7,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { toast } from "@/components/ui/use-toast";
 import { supabase } from "@/integrations/supabase/client";
 import type { Database } from "@/integrations/supabase/types";
+import { enhancePoem } from "@/lib/huggingface";
 
 type Poem = Database["public"]["Tables"]["poems"]["Row"];
 
@@ -60,7 +61,6 @@ export function PoemEditor() {
 
     try {
       if (isEditing && poemId) {
-        // 시 수정
         const { error } = await supabase
           .from("poems")
           .update({ title, content, updated_at: new Date().toISOString() })
@@ -71,7 +71,6 @@ export function PoemEditor() {
           description: "Your poem has been updated successfully",
         });
       } else {
-        // 새 시 저장
         const { error } = await supabase.from("poems").insert([{ title, content }]);
         if (error) throw error;
         toast({
@@ -80,15 +79,14 @@ export function PoemEditor() {
         });
       }
 
-      // 임시 저장된 내용 삭제
-      const savedPoems = JSON.parse(localStorage.getItem('temporaryPoems') || '[]');
-      const updatedSavedPoems = savedPoems.filter((poem: any) =>
-        poem.title !== title || poem.content !== content
-      );
+      // 임시 저장 데이터 삭제
+      localStorage.removeItem("tempPoem");
 
-      localStorage.setItem('temporaryPoems', JSON.stringify(updatedSavedPoems));
+      // 입력 필드 초기화
+      setTitle("");
+      setContent("");
 
-      // 히스토리 페이지로 자동 이동
+      // 히스토리 페이지로 이동
       navigate('/history');
     } catch (error) {
       console.error("Error saving poem:", error);
@@ -106,11 +104,36 @@ export function PoemEditor() {
   };
 
   const handleAIEdit = async () => {
-    // TODO: Implement AI editing functionality
-    toast({
-      title: "AI Edit",
-      description: "AI editing feature coming soon!",
-    });
+    if (!content) {
+      toast({
+        title: "내용 없음",
+        description: "수정할 시 내용을 먼저 입력해주세요.",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    try {
+      toast({
+        title: "AI 수정 중...",
+        description: "잠시만 기다려주세요.",
+      });
+
+      const enhancedContent = await enhancePoem(content);
+      setContent(enhancedContent);
+
+      toast({
+        title: "AI 수정 완료",
+        description: "시가 AI에 의해 수정되었습니다.",
+      });
+    } catch (error) {
+      console.error("Error in AI edit:", error);
+      toast({
+        title: "에러",
+        description: error.message || "AI 수정 중 오류가 발생했습니다.",
+        variant: "destructive",
+      });
+    }
   };
 
   return (
@@ -126,7 +149,7 @@ export function PoemEditor() {
           placeholder="Enter title"
           value={title}
           onChange={(e) => setTitle(e.target.value)}
-          className="text-2xl font-bold bg-gray-100/30 border-border/800 focus:border-border text-black placeholder:text-gray-900 placeholder:opacity-70"
+          className="text-2xl font-bold bg-gray-400/30 border-gray-500 focus:border-border text-black placeholder:text-gray-900 placeholder:opacity-70"
         />
       </div>
       <div className="space-y-2">
@@ -134,7 +157,7 @@ export function PoemEditor() {
           placeholder="Write your poem"
           value={content}
           onChange={(e) => setContent(e.target.value)}
-          className="min-h-[300px] text-xl font-semibold leading-relaxed bg-gray-100/30 border-border/50 focus:border-border resize-none text-black placeholder:text-gray-900 placeholder:opacity-70"
+          className="min-h-[300px] text-xl font-medium leading-relaxed bg-gray-400/30 border-gray-500 focus:border-border resize-none text-black placeholder:text-gray-900 placeholder:opacity-70"
         />
       </div>
       <div className="flex justify-end space-x-4">

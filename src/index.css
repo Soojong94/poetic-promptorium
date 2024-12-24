@@ -115,9 +115,3 @@ body {
 
   }
 }
-
-@layer base {
-  body {
-    font-family: 'Pacifico', cursive;
-  }
-}

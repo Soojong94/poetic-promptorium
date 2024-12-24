@@ -1,4 +1,3 @@
-// components/EditPoemDialog.tsx
 import { useState } from "react";
 import {
   Dialog,
@@ -6,6 +5,7 @@ import {
   DialogHeader,
   DialogTitle,
   DialogFooter,
+  DialogDescription,
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -36,9 +36,15 @@ export function EditPoemDialog({
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="sm:max-w-[425px] bg-slate-900/95 border-slate-800"> {/* 매우 진한 배경색으로 변경 */}
+      <DialogContent
+        className="sm:max-w-[425px] bg-slate-900/95 border-slate-800"
+        aria-describedby="dialog-description"
+      >
         <DialogHeader>
           <DialogTitle>시 수정</DialogTitle>
+          <DialogDescription id="dialog-description">
+            시의 제목과 내용을 수정할 수 있습니다.
+          </DialogDescription>
         </DialogHeader>
         <div className="grid gap-4 py-4">
           <Input
