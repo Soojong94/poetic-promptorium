@@ -152,15 +152,7 @@ export function PoemEditor() {
           {isEditing ? "Update Poem" : "Save Poem"}
         </Button>
       </div>
-      <div className="flex justify-end">
-        <Button
-          onClick={() => handleNavigation("/history")}
-          variant="ghost"
-          className="text-muted-foreground hover:text-foreground"
-        >
-          View History
-        </Button>
-      </div>
+
     </motion.div>
   );
 }
