@@ -1,22 +1,25 @@
+// components/EditPoemDialog.tsx
 import { useState } from "react";
 import {
   Dialog,
   DialogContent,
   DialogHeader,
   DialogTitle,
+  DialogDescription,  // 이 줄 추가
   DialogFooter,
-  DialogDescription,
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
+import { ColorPicker } from "@/components/ColorPicker";
 
 interface EditPoemDialogProps {
   isOpen: boolean;
   onClose: () => void;
-  onSave: (title: string, content: string) => void;
+  onSave: (title: string, content: string, backgroundColor: string) => void;
   initialTitle: string;
   initialContent: string;
+  initialBackgroundColor: string;
 }
 
 export function EditPoemDialog({
@@ -25,25 +28,24 @@ export function EditPoemDialog({
   onSave,
   initialTitle,
   initialContent,
+  initialBackgroundColor,
 }: EditPoemDialogProps) {
   const [title, setTitle] = useState(initialTitle);
   const [content, setContent] = useState(initialContent);
+  const [backgroundColor, setBackgroundColor] = useState(initialBackgroundColor);
 
   const handleSave = () => {
-    onSave(title, content);
+    onSave(title, content, backgroundColor);
     onClose();
   };
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent
-        className="sm:max-w-[425px] bg-slate-900/95 border-slate-800"
-        aria-describedby="dialog-description"
-      >
+      <DialogContent className="sm:max-w-[425px] bg-slate-900/95 border-slate-800">
         <DialogHeader>
           <DialogTitle>시 수정</DialogTitle>
-          <DialogDescription id="dialog-description">
-            시의 제목과 내용을 수정할 수 있습니다.
+          <DialogDescription>
+            시의 내용을 수정하실 수 있습니다.
           </DialogDescription>
         </DialogHeader>
         <div className="grid gap-4 py-4">
@@ -58,6 +60,13 @@ export function EditPoemDialog({
             onChange={(e) => setContent(e.target.value)}
             className="min-h-[200px]"
           />
+          <div className="flex items-center gap-4">
+            <label className="text-sm font-medium">Card Color:</label>
+            <ColorPicker
+              value={backgroundColor}
+              onChange={setBackgroundColor}
+            />
+          </div>
         </div>
         <DialogFooter>
           <Button variant="outline" onClick={onClose}>

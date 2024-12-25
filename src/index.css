@@ -65,12 +65,13 @@
   }
 }
 
-body {
+/* body의 배경 관련 스타일 제거 */
+/* body {
+  background-image: url('/trees.jpg');
   background-size: cover;
   background-position: center;
   background-attachment: fixed;
-  transition: background-image 0.5s ease-in-out;
-}
+} */
 
 @layer base {
   * {
@@ -78,6 +79,6 @@ body {
   }
 
   body {
-    @apply bg-background text-foreground;
+    @apply text-foreground;
   }
 }

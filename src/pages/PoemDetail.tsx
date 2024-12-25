@@ -1,4 +1,5 @@
-import { useEffect, useState, useRef } from "react";
+// pages/PoemDetail.tsx
+import { useEffect, useState } from "react";
 import { useNavigate, useParams, useLocation } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
@@ -9,9 +10,11 @@ import type { Database } from "@/integrations/supabase/types";
 import { enhancePoem } from "@/lib/huggingface";
 import { DeleteAlert } from "@/components/DeleteAlert";
 import { EditPoemDialog } from "@/components/EditPoemDialog";
-import { Sheet, SheetContent, SheetHeader, SheetTitle } from "@/components/ui/sheet";
+import { CARD_BACKGROUNDS } from "@/lib/constants";
 
-type Poem = Database["public"]["Tables"]["poems"]["Row"];
+type Poem = Database["public"]["Tables"]["poems"]["Row"] & {
+  background_color?: string;
+};
 
 export default function PoemDetail() {
   const { id } = useParams();
@@ -20,13 +23,8 @@ export default function PoemDetail() {
   const [poem, setPoem] = useState<Poem | null>(null);
   const page = new URLSearchParams(location.search).get("page") || "1";
 
-  // 삭제 알림창과 수정 다이얼로그 상태 관리
   const [deleteAlert, setDeleteAlert] = useState(false);
   const [editDialog, setEditDialog] = useState(false);
-  const [showAnalysis, setShowAnalysis] = useState(false);
-  const [analysisText, setAnalysisText] = useState<string>("");
-  const [isAnalyzing, setIsAnalyzing] = useState(false);
-  const abortControllerRef = useRef<AbortController | null>(null);
 
   useEffect(() => {
     fetchPoem();
@@ -53,51 +51,40 @@ export default function PoemDetail() {
   };
 
   const handleAiEdit = async () => {
+    if (!poem) return;
+
     try {
-      if (isAnalyzing) {
-        abortControllerRef.current?.abort();
-        return;
-      }
-
-      setIsAnalyzing(true);
-      setAnalysisText("");
-      setShowAnalysis(true);
-
-      abortControllerRef.current = new AbortController();
-
       toast({
-        title: "AI 분석 중...",
-        description: "실시간으로 분석 내용이 표시됩니다.",
+        title: "AI 수정 중...",
+        description: "잠시만 기다려주세요.",
       });
 
-      await enhancePoem(
-        poem.content,
-        (currentText) => {
-          setAnalysisText(currentText);
-        },
-        abortControllerRef.current.signal
-      );
+      const enhancedContent = await enhancePoem(poem.content);
 
-      setIsAnalyzing(false);
+      const { data, error } = await supabase
+        .from("poems")
+        .update({
+          content: enhancedContent,
+          updated_at: new Date().toISOString()
+        })
+        .eq("id", id)
+        .select()
+        .single();
+
+      if (error) throw error;
+
+      setPoem(data);
       toast({
-        title: "AI 분석 완료",
-        description: "시 분석이 완료되었습니다.",
+        title: "AI 수정 완료",
+        description: "시가 AI에 의해 수정되었습니다.",
       });
     } catch (error) {
-      if (error.name === 'AbortError') {
-        toast({
-          title: "분석 중단",
-          description: "시 분석이 중단되었습니다.",
-        });
-      } else {
-        console.error("Error in AI analysis:", error);
-        toast({
-          title: "에러",
-          description: error.message || "AI 분석 중 오류가 발생했습니다.",
-          variant: "destructive",
-        });
-      }
-      setIsAnalyzing(false);
+      console.error("Error in AI edit:", error);
+      toast({
+        title: "에러",
+        description: "AI 수정 중 오류가 발생했습니다.",
+        variant: "destructive",
+      });
     }
   };
 
@@ -126,13 +113,14 @@ export default function PoemDetail() {
     }
   };
 
-  const handleEdit = async (title: string, content: string) => {
+  const handleEdit = async (title: string, content: string, backgroundColor: string) => {
     try {
       const { data, error } = await supabase
         .from("poems")
         .update({
           title,
           content,
+          background_color: backgroundColor,
           updated_at: new Date().toISOString()
         })
         .eq("id", id)
@@ -153,17 +141,6 @@ export default function PoemDetail() {
         description: "시를 수정하는데 실패했습니다.",
         variant: "destructive",
       });
-    }
-  };
-
-  const handleStopAnalysis = () => {
-    abortControllerRef.current?.abort();
-    setIsAnalyzing(false);
-  };
-
-  const handleReanalyze = () => {
-    if (!isAnalyzing) {
-      handleAiEdit();
     }
   };
 
@@ -192,7 +169,7 @@ export default function PoemDetail() {
             onClick={handleAiEdit}
           >
             <Wand2 className="w-4 h-4 mr-2" />
-            AI 분석
+            AI 수정
           </Button>
           <Button
             variant="destructive"
@@ -227,42 +204,8 @@ export default function PoemDetail() {
         onSave={handleEdit}
         initialTitle={poem.title}
         initialContent={poem.content}
+        initialBackgroundColor={poem.background_color || Object.values(CARD_BACKGROUNDS)[0]}
       />
-
-      <Sheet open={showAnalysis} onOpenChange={setShowAnalysis}>
-        <SheetContent side="right" className="w-[400px] sm:w-[540px] md:w-[600px]">
-          <SheetHeader className="space-y-4">
-            <SheetTitle>AI 시 분석</SheetTitle>
-            <div className="flex gap-2">
-              <Button
-                variant="outline"
-                onClick={handleReanalyze}
-                disabled={isAnalyzing}
-              >
-                재분석
-              </Button>
-              {isAnalyzing && (
-                <Button
-                  variant="destructive"
-                  onClick={handleStopAnalysis}
-                >
-                  분석 중지
-                </Button>
-              )}
-            </div>
-          </SheetHeader>
-          <div className="mt-6 space-y-4">
-            {isAnalyzing && (
-              <div className="flex items-center justify-center">
-                <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
-              </div>
-            )}
-            <div className="whitespace-pre-wrap leading-relaxed">
-              {analysisText}
-            </div>
-          </div>
-        </SheetContent>
-      </Sheet>
     </div>
   );
 }

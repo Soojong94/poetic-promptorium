@@ -14,15 +14,17 @@ export default function History() {
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{ duration: 0.5 }}
-      className="p-6 md:p-8 lg:p-12 space-y-10 bg-background text-foreground"
+      // 아래 클래스에서 bg-background 제거
+      className="p-6 md:p-8 lg:p-12 space-y-10 text-foreground"
     >
       <RandomBackground />
       <div className="text-center space-y-2 mb-10">
-        <Heading>Poetry Studio</Heading>
-        <Subtitle className="text-primary">Create and preserve your poetic expressions</Subtitle>
+        {/* 타이틀 부분 배경도 투명하게 */}
+        <Heading className="text-white">Poetry Studio</Heading>
+        <Subtitle className="text-gray-300">Create and preserve your poetic expressions</Subtitle>
       </div>
 
-      <div className="max-w-4xl mx-auto">
+      <div className="max-w-4xl mx-auto backdrop-blur-none"> {/* backdrop-blur 제거 */}
         <Tabs defaultValue="history" className="w-full mb-6">
           <TabsList className="grid w-full grid-cols-2">
             <TabsTrigger

@@ -16,7 +16,10 @@ export type Database = {
           id: string
           title: string
           updated_at: string
+          background_color: string
+          background_image: string  // 추가
         }
+        
         Insert: {
           content: string
           created_at?: string

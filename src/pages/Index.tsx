@@ -14,7 +14,7 @@ export default function Index() {
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{ duration: 0.5 }}
-      className="p-6 md:p-8 lg:p-12 space-y-10 bg-background text-foreground"
+      className="p-6 md:p-8 lg:p-12 space-y-10"
     >
       <RandomBackground />
       <div className="text-center space-y-2 mb-10">

@@ -1,19 +1,15 @@
-// Available background images
-const backgroundImages = [
-  '/trees.jpg',
-  'https://images.unsplash.com/photo-1472396961693-142e6e269027',
-  'https://images.unsplash.com/photo-1439886183900-e79ec0057170',
-  'https://images.unsplash.com/photo-1485833077593-4278bba3f11f',
-  'https://images.unsplash.com/photo-1438565434616-3ef039228b15'
+const cardBackgrounds = [
+  'bg-slate-900/95',  // 진한 슬레이트 블랙
+  'bg-gray-900/95',   // 진한 그레이 블랙
+  'bg-zinc-900/95',   // 진한 징크 블랙
+  'bg-neutral-900/95', // 진한 뉴트럴 블랙
+  'bg-stone-900/95'   // 진한 스톤 블랙
 ];
 
-// Card background colors with similar shades
-const cardBackgrounds = [
-  'bg-purple-100/80',
-  'bg-purple-50/80',
-  'bg-amber-50/80',
-  'bg-rose-50/80',
-  'bg-blue-50/80'
+// Available background images
+const backgroundImages = [
+  // '/trees.jpg',
+  // '/background (1).jpg',
 ];
 
 export const getRandomBackground = () => {
