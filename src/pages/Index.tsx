@@ -13,9 +13,9 @@ const Index = () => {
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{ duration: 0.5 }}
-      className="p-8 md:p-10 lg:p-7 space-y-12 bg-background text-foreground" // space-y와 패딩 값 축소
+      className="p-6 md:p-8 lg:p-12 space-y-10 bg-background text-foreground"
     >
-      <div className="text-center space-y-4 mb-10">
+      <div className="text-center space-y-2 mb-10">
         <Heading className="text-white">Poetry Studio</Heading>
         <Subtitle className="text-gray-300">Create and preserve your poetic expressions</Subtitle>
       </div>
