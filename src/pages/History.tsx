@@ -13,9 +13,9 @@ export default function History() {
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{ duration: 0.5 }}
-      className="p-6 md:p-8 lg:p-12 space-y-10 bg-background text-foreground" // space-y-12를 space-y-6으로 줄이고, lg:p-10을 lg:p-8로 줄임
+      className="p-6 md:p-8 lg:p-12 space-y-10 bg-background text-foreground min-h-screen"
     >
-      <div className="text-center space-y-2 mb-10"> {/* space-y-4를 space-y-2로, mb-12를 mb-6으로 줄임 */}
+      <div className="text-center space-y-2 mb-10">
         <Heading>Poetry Studio</Heading>
         <Subtitle className="text-primary">Create and preserve your poetic expressions</Subtitle>
       </div>
