@@ -1,10 +1,11 @@
-import { motion } from "framer-motion";
 import { PoemEditor } from "@/components/PoemEditor";
 import { Heading, Subtitle } from "@/components/ui/typography";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useNavigate, useLocation } from "react-router-dom";
+import { motion } from "framer-motion";
+import { RandomBackground } from "@/components/RandomBackground";
 
-const Index = () => {
+export default function Index() {
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -15,12 +16,13 @@ const Index = () => {
       transition={{ duration: 0.5 }}
       className="p-6 md:p-8 lg:p-12 space-y-10 bg-background text-foreground"
     >
+      <RandomBackground />
       <div className="text-center space-y-2 mb-10">
-        <Heading className="text-white">Poetry Studio</Heading>
-        <Subtitle className="text-gray-300">Create and preserve your poetic expressions</Subtitle>
+        <Heading>Poetry Studio</Heading>
+        <Subtitle className="text-primary">Create and preserve your poetic expressions</Subtitle>
       </div>
 
-      <div className="w-full max-w-4xl mx-auto">
+      <div className="max-w-4xl mx-auto">
         <Tabs defaultValue="editor" className="w-full mb-6">
           <TabsList className="grid w-full grid-cols-2">
             <TabsTrigger
@@ -44,5 +46,3 @@ const Index = () => {
     </motion.div>
   );
 }
-
-export default Index;
