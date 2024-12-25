@@ -13,15 +13,15 @@ export default function History() {
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{ duration: 0.5 }}
-      className="p-6 md:p-8 lg:p-12 space-y-10 bg-background text-foreground min-h-screen"
+      className="p-6 md:p-8 lg:p-10 bg-background text-foreground min-h-screen"
     >
-      <div className="text-center space-y-2 mb-10">
+      <div className="text-center space-y-2 mb-6">
         <Heading>Poetry Studio</Heading>
         <Subtitle className="text-primary">Create and preserve your poetic expressions</Subtitle>
       </div>
 
       <div className="max-w-4xl mx-auto">
-        <Tabs defaultValue="history" className="w-full mb-6">
+        <Tabs defaultValue="history" className="w-full mb-4">
           <TabsList className="grid w-full grid-cols-2">
             <TabsTrigger
               value="editor"
