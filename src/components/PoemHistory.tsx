@@ -21,6 +21,7 @@ import { DeleteAlert } from "./DeleteAlert";
 import { EditPoemDialog } from "./EditPoemDialog";
 import { enhancePoem } from "@/lib/huggingface";
 import { CARD_BACKGROUNDS } from "@/lib/constants";
+import { useIsMobile } from "@/hooks/use-mobile";
 
 type Poem = Database["public"]["Tables"]["poems"]["Row"] & {
   background_color?: string;
@@ -142,9 +143,9 @@ export function PoemHistory() {
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{ duration: 0.5 }}
-      className="space-y-4"
+      className="h-full flex flex-col"  // flex와 flex-col 추가
     >
-      <div className="grid gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
+      <div className="flex-grow grid gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
         {poems.map((poem) => (
           <PoemCard
             key={poem.id}
@@ -158,24 +159,26 @@ export function PoemHistory() {
       </div>
 
       {totalPages > 1 && (
-        <div className="mt-8 rounded-lg bg-gray-900/50 p-2 inline-block mx-auto"> {/* 배경 추가 */}
-          <Pagination>
-            <PaginationContent>
-              <PaginationItem>
-                <PaginationPrevious
-                  onClick={() => handlePageChange(Math.max(currentPage - 1, 1))}
-                  className={currentPage === 1 ? "pointer-events-none opacity-50" : "cursor-pointer"}
-                />
-              </PaginationItem>
-              {renderPaginationItems()}
-              <PaginationItem>
-                <PaginationNext
-                  onClick={() => handlePageChange(Math.min(currentPage + 1, totalPages))}
-                  className={currentPage === totalPages ? "pointer-events-none opacity-50" : "cursor-pointer"}
-                />
-              </PaginationItem>
-            </PaginationContent>
-          </Pagination>
+        <div className="mt-4 flex justify-center"> {/* margin 조정 */}
+          <div className="rounded-lg bg-gray-900/50 p-2"> {/* padding 조정 */}
+            <Pagination>
+              <PaginationContent>
+                <PaginationItem>
+                  <PaginationPrevious
+                    onClick={() => handlePageChange(Math.max(currentPage - 1, 1))}
+                    className={currentPage === 1 ? "pointer-events-none opacity-50" : "cursor-pointer"}
+                  />
+                </PaginationItem>
+                {renderPaginationItems()}
+                <PaginationItem>
+                  <PaginationNext
+                    onClick={() => handlePageChange(Math.min(currentPage + 1, totalPages))}
+                    className={currentPage === totalPages ? "pointer-events-none opacity-50" : "cursor-pointer"}
+                  />
+                </PaginationItem>
+              </PaginationContent>
+            </Pagination>
+          </div>
         </div>
       )}
     </motion.div>

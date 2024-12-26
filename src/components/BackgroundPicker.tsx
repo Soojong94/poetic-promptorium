@@ -48,12 +48,12 @@ export function BackgroundPicker() {
   };
 
   return (
-    <div className="flex items-center gap-2 w-full max-w-xs">
+    <div className="flex flex-col sm:flex-row items-start sm:items-center gap-2 w-full">
       <Select
         value={selectedBackground}
         onValueChange={setSelectedBackground}
       >
-        <SelectTrigger className="w-[150px]">
+        <SelectTrigger className="w-full sm:w-[150px]">
           <SelectValue placeholder="Select background" />
         </SelectTrigger>
         <SelectContent>
@@ -67,7 +67,7 @@ export function BackgroundPicker() {
       <Button
         onClick={handleApplyBackground}
         variant="secondary"
-        className="whitespace-nowrap flex-shrink-0"
+        className="w-full sm:w-auto"
       >
         이 배경 사용하기
       </Button>

@@ -5,10 +5,9 @@ import History from "./pages/History";
 import PoemDetail from "./pages/PoemDetail";
 import { Toaster } from "@/components/ui/toaster";
 import { getRandomBackground } from "@/lib/constants";
-import { supabase } from "@/integrations/supabase/client";  // supabase import 추가
+import { supabase } from "@/integrations/supabase/client";
 import "./App.css";
 
-// Router 밖에서는 useLocation을 사용할 수 없으므로 AppContent 컴포넌트 생성
 function AppContent() {
   const location = useLocation();
   const [backgroundImage, setBackgroundImage] = useState(getRandomBackground());
@@ -35,17 +34,18 @@ function AppContent() {
   }, [location]);
 
   return (
-    <div
-      className="min-h-screen w-full fixed inset-0"
-      style={{
-        backgroundImage: `url(${backgroundImage})`,
-        backgroundSize: 'cover',
-        backgroundPosition: 'center',
-        backgroundAttachment: 'fixed',
-        zIndex: -1
-      }}
-    >
-      <div className="relative min-h-screen">
+    <>
+      <div
+        className="fixed inset-0 w-full h-full"
+        style={{
+          backgroundImage: `url(${backgroundImage})`,
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
+          backgroundAttachment: 'fixed',
+          zIndex: -1
+        }}
+      />
+      <div className="relative">
         <Routes>
           <Route path="/" element={<Index />} />
           <Route path="/history" element={<History />} />
@@ -53,7 +53,7 @@ function AppContent() {
         </Routes>
         <Toaster />
       </div>
-    </div>
+    </>
   );
 }
 

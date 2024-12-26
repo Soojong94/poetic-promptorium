@@ -9,17 +9,17 @@ import { useIsMobile } from "@/hooks/use-mobile";
 export default function History() {
   const navigate = useNavigate();
   const location = useLocation();
-  const isMobile = useIsMobile();
+
 
   return (
     <motion.div
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{ duration: 0.5 }}
-      className="p-6 md:p-8 lg:p-12 space-y-10 text-foreground min-h-screen overflow-auto"
+      className="p-4 md:p-6 lg:p-8" // h-screen과 space-y-6 제거
     >
       <RandomBackground />
-      <div className="text-center space-y-2 mb-10">
+      <div className="text-center space-y-2 mb-6">
         <Heading className="text-white">Poetry Studio</Heading>
         <Subtitle className="text-gray-300">Create and preserve your poetic expressions</Subtitle>
       </div>

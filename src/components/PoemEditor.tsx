@@ -165,12 +165,12 @@ export function PoemEditor() {
 
   return (
     <motion.div
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
       transition={{ duration: 0.5 }}
-      className="w-full max-w-2xl mx-auto space-y-6"
+      className="w-full max-w-2xl mx-auto space-y-4" // space-y-6 -> space-y-4
     >
-      <div className="space-y-2 bg-gray-900/70 p-4 rounded-lg">
+      <div className="space-y-2 bg-gray-900/70 p-3 rounded-lg">
         <Input
           type="text"
           placeholder="Enter title"
@@ -179,12 +179,12 @@ export function PoemEditor() {
           className="text-2xl font-bold bg-transparent border-gray-900/50 focus:border-gray-900/70 text-white placeholder:text-gray-300 placeholder:opacity-70"
         />
       </div>
-      <div className="space-y-2 bg-gray-900/70 p-4 rounded-lg">
+      <div className="space-y-2 bg-gray-900/70 p-3 rounded-lg">
         <Textarea
           placeholder="Write your poem"
           value={content}
           onChange={(e) => setContent(e.target.value)}
-          className="min-h-[300px] text-xl font-medium leading-relaxed bg-transparent border-gray-900/50 focus:border-gray-900/70 resize-none text-white placeholder:text-gray-300 placeholder:opacity-70"
+          className="min-h-[250px] text-xl font-medium leading-relaxed bg-transparent border-gray-900/50 focus:border-gray-900/70 resize-none text-white placeholder:text-gray-300 placeholder:opacity-70"
         />
       </div>
 
@@ -192,32 +192,38 @@ export function PoemEditor() {
       <div className="space-y-6 bg-gray-900/70 p-6 rounded-lg">
         {/* 선택기들을 포함하는 상단 부분 */}
         <div className="flex flex-col gap-4">
-          <div className="flex items-center justify-center gap-8 flex-wrap">
-            <div className="flex items-center gap-4">
-              <label className="text-sm font-medium text-white whitespace-nowrap">Card Color:</label>
+          {/* 모바일에서는 세로로 배치되도록 변경 */}
+          <div className="flex flex-col gap-4">
+            {/* Card Color 선택기 */}
+            <div className="flex flex-col sm:flex-row items-start sm:items-center gap-2">
+              <label className="text-sm font-medium text-white min-w-[80px]">Card Color:</label>
               <ColorPicker
                 value={backgroundColor}
                 onChange={setBackgroundColor}
               />
             </div>
-            <div className="flex items-center gap-4">
-              <label className="text-sm font-medium text-white whitespace-nowrap">Background:</label>
-              <BackgroundPicker />
+
+            {/* Background 선택기 */}
+            <div className="flex flex-col sm:flex-row items-start sm:items-center gap-2">
+              <label className="text-sm font-medium text-white min-w-[80px]">Background:</label>
+              <div className="w-full sm:w-auto">
+                <BackgroundPicker />
+              </div>
             </div>
           </div>
 
           {/* 버튼들을 포함하는 하단 부분 */}
-          <div className="flex justify-center gap-4">
+          <div className="flex flex-col sm:flex-row justify-center gap-4 mt-4">
             <Button
               onClick={handleAIEdit}
               variant="outline"
-              className="border-primary/50 hover:border-primary bg-transparent whitespace-nowrap"
+              className="w-full sm:w-auto border-primary/50 hover:border-primary bg-transparent"
             >
               AI Edit
             </Button>
             <Button
               onClick={handleSave}
-              className="text-primary-foreground bg-primary/80 hover:bg-primary whitespace-nowrap"
+              className="w-full sm:w-auto text-primary-foreground bg-primary/80 hover:bg-primary"
             >
               {isEditing ? "Update Poem" : "Save Poem"}
             </Button>
