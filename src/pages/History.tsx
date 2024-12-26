@@ -16,9 +16,7 @@ export default function History() {
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{ duration: 0.5 }}
-      className={`p-6 md:p-8 lg:p-12 space-y-10 text-foreground ${
-        isMobile ? 'min-h-screen' : 'h-screen overflow-hidden'
-      }`}
+      className="p-6 md:p-8 lg:p-12 space-y-10 text-foreground min-h-screen"
     >
       <RandomBackground />
       <div className="text-center space-y-2 mb-10">
@@ -26,7 +24,7 @@ export default function History() {
         <Subtitle className="text-gray-300">Create and preserve your poetic expressions</Subtitle>
       </div>
 
-      <div className={`max-w-4xl mx-auto ${isMobile ? '' : 'h-[calc(100%-12rem)] overflow-auto'}`}>
+      <div className="max-w-4xl mx-auto">
         <Tabs defaultValue="history" className="w-full mb-6">
           <TabsList className="grid w-full grid-cols-2">
             <TabsTrigger
