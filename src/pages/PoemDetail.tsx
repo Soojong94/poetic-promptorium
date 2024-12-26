@@ -1,16 +1,15 @@
-// pages/PoemDetail.tsx
 import { useEffect, useState } from "react";
 import { useNavigate, useParams, useLocation } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
-import { Button } from "@/components/ui/button";
-import { ArrowLeft, Wand2, Pencil, Trash2 } from "lucide-react";
-import { format } from "date-fns";
 import { toast } from "@/components/ui/use-toast";
-import type { Database } from "@/integrations/supabase/types";
 import { enhancePoem } from "@/lib/huggingface";
 import { DeleteAlert } from "@/components/DeleteAlert";
 import { EditPoemDialog } from "@/components/EditPoemDialog";
 import { CARD_BACKGROUNDS } from "@/lib/constants";
+import { PoemActions } from "@/components/poem-detail/PoemActions";
+import { PoemContent } from "@/components/poem-detail/PoemContent";
+import { useIsMobile } from "@/hooks/use-mobile";
+import type { Database } from "@/integrations/supabase/types";
 
 type Poem = Database["public"]["Tables"]["poems"]["Row"] & {
   background_color?: string;
@@ -22,6 +21,7 @@ export default function PoemDetail() {
   const location = useLocation();
   const [poem, setPoem] = useState<Poem | null>(null);
   const page = new URLSearchParams(location.search).get("page") || "1";
+  const isMobile = useIsMobile();
 
   const [deleteAlert, setDeleteAlert] = useState(false);
   const [editDialog, setEditDialog] = useState(false);
@@ -147,49 +147,22 @@ export default function PoemDetail() {
   if (!poem) return null;
 
   return (
-    <div className="min-h-screen p-6 md:p-8 lg:p-12 space-y-8 bg-background text-foreground">
-      <div className="flex justify-between items-center mb-8">
-        <Button
-          variant="outline"
-          onClick={() => navigate(`/history?page=${page}`)}
-        >
-          <ArrowLeft className="w-4 h-4 mr-2" />
-          목록으로
-        </Button>
-        <div className="flex gap-2">
-          <Button
-            variant="outline"
-            onClick={() => setEditDialog(true)}
-          >
-            <Pencil className="w-4 h-4 mr-2" />
-            수정
-          </Button>
-          <Button
-            variant="outline"
-            onClick={handleAiEdit}
-          >
-            <Wand2 className="w-4 h-4 mr-2" />
-            AI 수정
-          </Button>
-          <Button
-            variant="destructive"
-            onClick={() => setDeleteAlert(true)}
-          >
-            <Trash2 className="w-4 h-4 mr-2" />
-            삭제
-          </Button>
-        </div>
-      </div>
+    <div className={`p-6 md:p-8 lg:p-12 space-y-8 bg-background text-foreground ${
+      isMobile ? 'min-h-screen overflow-auto' : 'h-screen overflow-hidden'
+    }`}>
+      <PoemActions
+        onBack={() => navigate(`/history?page=${page}`)}
+        onEdit={() => setEditDialog(true)}
+        onAiEdit={handleAiEdit}
+        onDelete={() => setDeleteAlert(true)}
+        page={page}
+      />
 
-      <div className="max-w-2xl mx-auto space-y-6">
-        <h1 className="text-3xl font-medium break-words">{poem.title}</h1>
-        <p className="text-sm text-muted-foreground">
-          {format(new Date(poem.created_at), "yyyy년 MM월 dd일 HH:mm:ss")}
-        </p>
-        <div className="mt-8 whitespace-pre-wrap leading-relaxed break-words">
-          {poem.content}
-        </div>
-      </div>
+      <PoemContent
+        title={poem.title}
+        content={poem.content}
+        createdAt={poem.created_at}
+      />
 
       <DeleteAlert
         isOpen={deleteAlert}
