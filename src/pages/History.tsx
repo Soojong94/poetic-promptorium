@@ -4,27 +4,29 @@ import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useNavigate, useLocation } from "react-router-dom";
 import { motion } from "framer-motion";
 import { RandomBackground } from "@/components/RandomBackground";
+import { useIsMobile } from "@/hooks/use-mobile";
 
 export default function History() {
   const navigate = useNavigate();
   const location = useLocation();
+  const isMobile = useIsMobile();
 
   return (
     <motion.div
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{ duration: 0.5 }}
-      // 아래 클래스에서 bg-background 제거
-      className="p-6 md:p-8 lg:p-12 space-y-10 text-foreground"
+      className={`p-6 md:p-8 lg:p-12 space-y-10 text-foreground ${
+        isMobile ? 'min-h-screen' : 'h-screen overflow-hidden'
+      }`}
     >
       <RandomBackground />
       <div className="text-center space-y-2 mb-10">
-        {/* 타이틀 부분 배경도 투명하게 */}
         <Heading className="text-white">Poetry Studio</Heading>
         <Subtitle className="text-gray-300">Create and preserve your poetic expressions</Subtitle>
       </div>
 
-      <div className="max-w-4xl mx-auto backdrop-blur-none"> {/* backdrop-blur 제거 */}
+      <div className={`max-w-4xl mx-auto ${isMobile ? '' : 'h-[calc(100%-12rem)] overflow-auto'}`}>
         <Tabs defaultValue="history" className="w-full mb-6">
           <TabsList className="grid w-full grid-cols-2">
             <TabsTrigger

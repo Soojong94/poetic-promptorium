@@ -11,16 +11,17 @@ export type Database = {
     Tables: {
       poems: {
         Row: {
+          background_color: string | null
+          background_image: string | null
           content: string
           created_at: string
           id: string
           title: string
           updated_at: string
-          background_color: string
-          background_image: string  // 추가
         }
-        
         Insert: {
+          background_color?: string | null
+          background_image?: string | null
           content: string
           created_at?: string
           id?: string
@@ -28,6 +29,8 @@ export type Database = {
           updated_at?: string
         }
         Update: {
+          background_color?: string | null
+          background_image?: string | null
           content?: string
           created_at?: string
           id?: string
