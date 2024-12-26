@@ -18,40 +18,42 @@ export function PoemActions({ onBack, onEdit, onAiEdit, onDelete, page }: PoemAc
   };
 
   return (
-    <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-8">
-      <Button
-        variant="outline"
-        onClick={handleBack}
-        className="w-full md:w-auto"
-      >
-        <ArrowLeft className="w-4 h-4 mr-2" />
-        목록으로
-      </Button>
-      <div className="flex flex-col md:flex-row gap-2 w-full md:w-auto">
+    <div className="sticky top-0 z-10 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 p-4 w-full">
+      <div className="flex flex-col gap-4 max-w-2xl mx-auto">
         <Button
           variant="outline"
-          onClick={onEdit}
-          className="w-full md:w-auto"
+          onClick={handleBack}
+          className="w-full"
         >
-          <Pencil className="w-4 h-4 mr-2" />
-          수정
+          <ArrowLeft className="w-4 h-4 mr-2" />
+          목록으로
         </Button>
-        <Button
-          variant="outline"
-          onClick={onAiEdit}
-          className="w-full md:w-auto"
-        >
-          <Wand2 className="w-4 h-4 mr-2" />
-          AI 수정
-        </Button>
-        <Button
-          variant="destructive"
-          onClick={onDelete}
-          className="w-full md:w-auto"
-        >
-          <Trash2 className="w-4 h-4 mr-2" />
-          삭제
-        </Button>
+        <div className="flex flex-col sm:flex-row gap-2 w-full">
+          <Button
+            variant="outline"
+            onClick={onEdit}
+            className="w-full"
+          >
+            <Pencil className="w-4 h-4 mr-2" />
+            수정
+          </Button>
+          <Button
+            variant="outline"
+            onClick={onAiEdit}
+            className="w-full"
+          >
+            <Wand2 className="w-4 h-4 mr-2" />
+            AI 수정
+          </Button>
+          <Button
+            variant="destructive"
+            onClick={onDelete}
+            className="w-full"
+          >
+            <Trash2 className="w-4 h-4 mr-2" />
+            삭제
+          </Button>
+        </div>
       </div>
     </div>
   );
