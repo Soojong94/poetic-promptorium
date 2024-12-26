@@ -16,7 +16,7 @@ export default function History() {
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{ duration: 0.5 }}
-      className="p-6 md:p-8 lg:p-12 space-y-10 text-foreground min-h-screen"
+      className="p-6 md:p-8 lg:p-12 space-y-10 text-foreground min-h-screen overflow-auto"
     >
       <RandomBackground />
       <div className="text-center space-y-2 mb-10">
