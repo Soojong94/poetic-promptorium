@@ -11,12 +11,24 @@ import "./App.css";
 
 function App() {
   const [background, setBackground] = useState(() => {
+    const isRandomSaved = localStorage.getItem('isRandomBackground') === 'true';
+    if (isRandomSaved) {
+      return 'random';
+    }
     return localStorage.getItem('background') || getRandomBackground();
   });
 
+  const handleBackgroundChange = (newBackground: string) => {
+    setBackground(newBackground);
+    if (newBackground !== 'random') {
+      localStorage.setItem('background', newBackground);
+    }
+  };
+
   useEffect(() => {
-    document.body.style.backgroundImage = `url(${background})`;
-    localStorage.setItem('background', background);
+    if (background !== 'random') {
+      document.body.style.backgroundImage = `url(${background})`;
+    }
   }, [background]);
 
   return (
@@ -24,19 +36,9 @@ function App() {
       <div className="fixed top-4 right-4 z-50">
         <BackgroundPicker
           currentBackground={background}
-          onBackgroundChange={setBackground}
+          onBackgroundChange={handleBackgroundChange}
         />
       </div>
-      <div
-        className="fixed inset-0 w-full h-full"
-        style={{
-          backgroundImage: `url(${background})`,
-          backgroundSize: 'cover',
-          backgroundPosition: 'center',
-          backgroundAttachment: 'fixed',
-          zIndex: -1
-        }}
-      />
       <div className="relative">
         <Routes>
           <Route path="/" element={<Index />} />
