@@ -1,4 +1,3 @@
-// components/BackgroundPicker.tsx
 import {
   Select,
   SelectContent,
@@ -6,7 +5,7 @@ import {
   SelectTrigger,
   SelectValue
 } from "@/components/ui/select";
-import { BACKGROUND_OPTIONS, getRandomBackground } from "@/lib/constants";
+import { BACKGROUND_OPTIONS } from "@/lib/constants";
 import { toast } from "@/components/ui/use-toast";
 
 interface BackgroundPickerProps {
@@ -17,9 +16,8 @@ interface BackgroundPickerProps {
 export function BackgroundPicker({ currentBackground, onBackgroundChange }: BackgroundPickerProps) {
   const handleBackgroundChange = (value: string) => {
     try {
-      const backgroundUrl = value === 'random' ? getRandomBackground() : value;
-      onBackgroundChange(backgroundUrl);
-      
+      onBackgroundChange(value);
+
       toast({
         title: "배경 변경됨",
         description: "새로운 배경이 적용되었습니다.",

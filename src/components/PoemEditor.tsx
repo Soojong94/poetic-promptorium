@@ -175,28 +175,30 @@ export function PoemEditor() {
 
       <div className="space-y-6 bg-gray-900/70 p-6 rounded-lg">
         <div className="flex flex-col gap-4">
-          <div className="flex flex-col sm:flex-row items-start sm:items-center gap-2">
-            <label className="text-sm font-medium text-white min-w-[80px]">Card Color:</label>
-            <ColorPicker
-              value={backgroundColor}
-              onChange={setBackgroundColor}
-            />
-          </div>
+          <div className="flex items-center justify-between gap-4">
+            <div className="flex items-center gap-2">
+              <label className="text-sm font-medium text-white min-w-[80px]">Card Color:</label>
+              <ColorPicker
+                value={backgroundColor}
+                onChange={setBackgroundColor}
+              />
+            </div>
 
-          <div className="flex flex-col sm:flex-row justify-center gap-4 mt-4">
-            <Button
-              onClick={handleAIEdit}
-              variant="outline"
-              className="w-full sm:w-auto border-primary/50 hover:border-primary bg-transparent"
-            >
-              AI Edit
-            </Button>
-            <Button
-              onClick={handleSave}
-              className="w-full sm:w-auto text-primary-foreground bg-primary/80 hover:bg-primary"
-            >
-              {isEditing ? "Update Poem" : "Save Poem"}
-            </Button>
+            <div className="flex gap-2">
+              <Button
+                onClick={handleAIEdit}
+                variant="outline"
+                className="border-primary/50 hover:border-primary bg-transparent"
+              >
+                AI Edit
+              </Button>
+              <Button
+                onClick={handleSave}
+                className="text-primary-foreground bg-primary/80 hover:bg-primary"
+              >
+                {isEditing ? "Update Poem" : "Save Poem"}
+              </Button>
+            </div>
           </div>
         </div>
       </div>
