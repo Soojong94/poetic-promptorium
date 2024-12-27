@@ -10,40 +10,41 @@ export default function History() {
   const navigate = useNavigate();
   const location = useLocation();
 
-
   return (
     <motion.div
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{ duration: 0.5 }}
-      className="p-4 md:p-6 lg:p-8" // h-screen과 space-y-6 제거
+      className="min-h-screen flex flex-col overflow-auto"
     >
       <RandomBackground />
-      <div className="text-center space-y-2 mb-6">
-        <Heading className="text-white">Poetry Studio</Heading>
-        <Subtitle className="text-gray-300">Create and preserve your poetic expressions</Subtitle>
-      </div>
+      <div className="flex-1 p-4 md:p-6 lg:p-8">
+        <div className="text-center space-y-2 mb-6">
+          <Heading className="text-white">Poetry Studio</Heading>
+          <Subtitle className="text-gray-300">Create and preserve your poetic expressions</Subtitle>
+        </div>
 
-      <div className="max-w-4xl mx-auto">
-        <Tabs defaultValue="history" className="w-full mb-6">
-          <TabsList className="grid w-full grid-cols-2">
-            <TabsTrigger
-              value="editor"
-              onClick={() => navigate("/")}
-              className={location.pathname === "/" ? "data-[state=active]" : ""}
-            >
-              Write New Poem
-            </TabsTrigger>
-            <TabsTrigger
-              value="history"
-              onClick={() => navigate("/history")}
-              className={location.pathname === "/history" ? "data-[state=active]" : ""}
-            >
-              View History
-            </TabsTrigger>
-          </TabsList>
-        </Tabs>
-        <PoemHistory />
+        <div className="max-w-4xl mx-auto">
+          <Tabs defaultValue="history" className="w-full mb-6">
+            <TabsList className="grid w-full grid-cols-2">
+              <TabsTrigger
+                value="editor"
+                onClick={() => navigate("/")}
+                className={location.pathname === "/" ? "data-[state=active]" : ""}
+              >
+                Write New Poem
+              </TabsTrigger>
+              <TabsTrigger
+                value="history"
+                onClick={() => navigate("/history")}
+                className={location.pathname === "/history" ? "data-[state=active]" : ""}
+              >
+                View History
+              </TabsTrigger>
+            </TabsList>
+          </Tabs>
+          <PoemHistory />
+        </div>
       </div>
     </motion.div>
   );
