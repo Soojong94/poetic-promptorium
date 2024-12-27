@@ -6,21 +6,33 @@ import History from "./pages/History";
 import PoemDetail from "./pages/PoemDetail";
 import { Toaster } from "@/components/ui/toaster";
 import { BackgroundPicker } from "@/components/BackgroundPicker";
-import { BACKGROUND_OPTIONS } from "@/lib/constants";
+import { BACKGROUND_OPTIONS, getRandomBackground } from "@/lib/constants";
 import "./App.css";
 
 function App() {
   const [background, setBackground] = useState(() => {
-    return localStorage.getItem('background') || '/background1.jpg';
+    const isRandomSaved = localStorage.getItem('isRandomBackground') === 'true';
+    if (isRandomSaved) {
+      return 'random';
+    }
+    return localStorage.getItem('background') || getRandomBackground();
   });
 
+  const handleBackgroundChange = (newBackground: string) => {
+    setBackground(newBackground);
+    if (newBackground !== 'random') {
+      localStorage.setItem('background', newBackground);
+    }
+  };
+
   useEffect(() => {
-    document.body.style.backgroundImage = `url(${background})`;
-    document.body.style.backgroundSize = 'cover';  // 'contain'에서 'cover'로 변경
-    document.body.style.backgroundPosition = 'center';
-    document.body.style.backgroundRepeat = 'no-repeat';  // 'repeat'에서 'no-repeat'로 변경
-    document.body.style.backgroundAttachment = 'fixed';
-    localStorage.setItem('background', background);
+    if (background !== 'random') {
+      document.body.style.backgroundImage = `url(${background})`;
+      document.body.style.backgroundSize = 'cover';
+      document.body.style.backgroundPosition = 'center';
+      document.body.style.backgroundRepeat = 'no-repeat';
+      document.body.style.backgroundAttachment = 'fixed';
+    }
   }, [background]);
 
   return (
@@ -28,10 +40,10 @@ function App() {
       <div className="fixed top-4 right-4 z-50">
         <BackgroundPicker
           currentBackground={background}
-          onBackgroundChange={setBackground}
+          onBackgroundChange={handleBackgroundChange}
         />
       </div>
-      <div className="relative bg-transparent">
+      <div className="relative">
         <Routes>
           <Route path="/" element={<Index />} />
           <Route path="/history" element={<History />} />
