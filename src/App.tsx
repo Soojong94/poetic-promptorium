@@ -1,44 +1,36 @@
-import { BrowserRouter as Router, Routes, Route, useLocation } from "react-router-dom";
+// App.tsx
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { useEffect, useState } from "react";
 import Index from "./pages/Index";
 import History from "./pages/History";
 import PoemDetail from "./pages/PoemDetail";
 import { Toaster } from "@/components/ui/toaster";
-import { getRandomBackground } from "@/lib/constants";
-import { supabase } from "@/integrations/supabase/client";
+import { BackgroundPicker } from "@/components/BackgroundPicker";
+import { BACKGROUND_OPTIONS, getRandomBackground } from "@/lib/constants";
 import "./App.css";
 
-function AppContent() {
-  const location = useLocation();
-  const [backgroundImage, setBackgroundImage] = useState(getRandomBackground());
+function App() {
+  const [background, setBackground] = useState(() => {
+    return localStorage.getItem('background') || getRandomBackground();
+  });
 
   useEffect(() => {
-    const loadBackgroundFromPath = async () => {
-      if (location.pathname.startsWith('/poem/')) {
-        const poemId = location.pathname.split('/')[2];
-        const { data } = await supabase
-          .from('poems')
-          .select('background_image')
-          .eq('id', poemId)
-          .single();
-
-        if (data?.background_image) {
-          setBackgroundImage(data.background_image);
-        }
-      } else {
-        setBackgroundImage(getRandomBackground());
-      }
-    };
-
-    loadBackgroundFromPath();
-  }, [location]);
+    document.body.style.backgroundImage = `url(${background})`;
+    localStorage.setItem('background', background);
+  }, [background]);
 
   return (
-    <>
+    <Router>
+      <div className="fixed top-4 right-4 z-50">
+        <BackgroundPicker
+          currentBackground={background}
+          onBackgroundChange={setBackground}
+        />
+      </div>
       <div
         className="fixed inset-0 w-full h-full"
         style={{
-          backgroundImage: `url(${backgroundImage})`,
+          backgroundImage: `url(${background})`,
           backgroundSize: 'cover',
           backgroundPosition: 'center',
           backgroundAttachment: 'fixed',
@@ -53,14 +45,6 @@ function AppContent() {
         </Routes>
         <Toaster />
       </div>
-    </>
-  );
-}
-
-function App() {
-  return (
-    <Router>
-      <AppContent />
     </Router>
   );
 }

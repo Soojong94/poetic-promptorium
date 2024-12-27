@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+// components/BackgroundPicker.tsx
 import {
   Select,
   SelectContent,
@@ -6,33 +6,20 @@ import {
   SelectTrigger,
   SelectValue
 } from "@/components/ui/select";
-import { Button } from "@/components/ui/button";
 import { BACKGROUND_OPTIONS, getRandomBackground } from "@/lib/constants";
 import { toast } from "@/components/ui/use-toast";
 
-export function BackgroundPicker() {
-  const [selectedBackground, setSelectedBackground] = useState(() => {
-    return localStorage.getItem('background') || BACKGROUND_OPTIONS.Random;
-  });
+interface BackgroundPickerProps {
+  currentBackground: string;
+  onBackgroundChange: (background: string) => void;
+}
 
-  // 컴포넌트 마운트 시 저장된 배경 적용
-  useEffect(() => {
-    const savedBackground = localStorage.getItem('background');
-    if (savedBackground) {
-      applyBackground(savedBackground);
-    }
-  }, []);
-
-  const applyBackground = (background: string) => {
-    const backgroundUrl = background === 'random' ? getRandomBackground() : background;
-    document.body.style.backgroundImage = `url(${backgroundUrl})`;
-  };
-
-  const handleApplyBackground = () => {
+export function BackgroundPicker({ currentBackground, onBackgroundChange }: BackgroundPickerProps) {
+  const handleBackgroundChange = (value: string) => {
     try {
-      applyBackground(selectedBackground);
-      localStorage.setItem('background', selectedBackground);
-
+      const backgroundUrl = value === 'random' ? getRandomBackground() : value;
+      onBackgroundChange(backgroundUrl);
+      
       toast({
         title: "배경 변경됨",
         description: "새로운 배경이 적용되었습니다.",
@@ -48,29 +35,22 @@ export function BackgroundPicker() {
   };
 
   return (
-    <div className="flex flex-col sm:flex-row items-start sm:items-center gap-2 w-full">
+    <div className="bg-gray-900/70 p-2 rounded-lg">
       <Select
-        value={selectedBackground}
-        onValueChange={setSelectedBackground}
+        value={currentBackground}
+        onValueChange={handleBackgroundChange}
       >
-        <SelectTrigger className="w-full sm:w-[150px]">
-          <SelectValue placeholder="Select background" />
+        <SelectTrigger className="w-[200px] bg-transparent border-gray-700">
+          <SelectValue placeholder="배경 선택" />
         </SelectTrigger>
         <SelectContent>
           {Object.entries(BACKGROUND_OPTIONS).map(([name, path]) => (
             <SelectItem key={name} value={path}>
-              <span>{name}</span>
+              {name}
             </SelectItem>
           ))}
         </SelectContent>
       </Select>
-      <Button
-        onClick={handleApplyBackground}
-        variant="secondary"
-        className="w-full sm:w-auto"
-      >
-        이 배경 사용하기
-      </Button>
     </div>
   );
 }

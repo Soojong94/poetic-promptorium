@@ -9,8 +9,7 @@ import { supabase } from "@/integrations/supabase/client";
 import type { Database } from "@/integrations/supabase/types";
 import { enhancePoem } from "@/lib/huggingface";
 import { ColorPicker } from "@/components/ColorPicker";
-import { CARD_BACKGROUNDS, BACKGROUND_OPTIONS, getRandomBackground } from "@/lib/constants";
-import { BackgroundPicker } from "@/components/BackgroundPicker";
+import { CARD_BACKGROUNDS } from "@/lib/constants";
 
 type Poem = Database["public"]["Tables"]["poems"]["Row"];
 
@@ -21,7 +20,6 @@ export function PoemEditor() {
   const [isEditing, setIsEditing] = useState(false);
   const [poemId, setPoemId] = useState<string | null>(null);
   const [backgroundColor, setBackgroundColor] = useState<string>(Object.values(CARD_BACKGROUNDS)[0]);
-  const [backgroundImage, setBackgroundImage] = useState<string>(BACKGROUND_OPTIONS.Random);
 
   // 임시 저장 함수
   const saveTemporaryPoem = useCallback(() => {
@@ -30,12 +28,11 @@ export function PoemEditor() {
         title,
         content,
         backgroundColor,
-        backgroundImage,
         timestamp: new Date().getTime()
       };
       localStorage.setItem("tempPoem", JSON.stringify(tempPoem));
     }
-  }, [title, content, backgroundColor, backgroundImage]);
+  }, [title, content, backgroundColor]);
 
   // 페이지 로드 시 임시 저장된 시 불러오기
   useEffect(() => {
@@ -47,7 +44,6 @@ export function PoemEditor() {
         setTitle(parsedPoem.title);
         setContent(parsedPoem.content);
         setBackgroundColor(parsedPoem.backgroundColor || Object.values(CARD_BACKGROUNDS)[0]);
-        setBackgroundImage(parsedPoem.backgroundImage || BACKGROUND_OPTIONS.Random);
       }
     }
   }, []);
@@ -69,10 +65,6 @@ export function PoemEditor() {
     }
 
     try {
-      const finalBackgroundImage = backgroundImage === 'random'
-        ? getRandomBackground()
-        : backgroundImage;
-
       if (isEditing && poemId) {
         const { error } = await supabase
           .from("poems")
@@ -80,7 +72,6 @@ export function PoemEditor() {
             title,
             content,
             background_color: backgroundColor,
-            background_image: finalBackgroundImage,
             updated_at: new Date().toISOString()
           })
           .eq("id", poemId);
@@ -95,8 +86,7 @@ export function PoemEditor() {
           .insert([{
             title,
             content,
-            background_color: backgroundColor,
-            background_image: finalBackgroundImage
+            background_color: backgroundColor
           }]);
         if (error) throw error;
         toast({
@@ -112,7 +102,6 @@ export function PoemEditor() {
       setTitle("");
       setContent("");
       setBackgroundColor(Object.values(CARD_BACKGROUNDS)[0]);
-      setBackgroundImage(BACKGROUND_OPTIONS.Random);
 
       // 히스토리 페이지로 이동
       navigate('/history');
@@ -124,10 +113,6 @@ export function PoemEditor() {
         variant: "destructive",
       });
     }
-  };
-
-  const handleNavigation = (path: string) => {
-    navigate(path);
   };
 
   const handleAIEdit = async () => {
@@ -168,7 +153,7 @@ export function PoemEditor() {
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{ duration: 0.5 }}
-      className="w-full max-w-2xl mx-auto space-y-4" // space-y-6 -> space-y-4
+      className="w-full max-w-2xl mx-auto space-y-4"
     >
       <div className="space-y-2 bg-gray-900/70 p-3 rounded-lg">
         <Input
@@ -188,31 +173,16 @@ export function PoemEditor() {
         />
       </div>
 
-
       <div className="space-y-6 bg-gray-900/70 p-6 rounded-lg">
-        {/* 선택기들을 포함하는 상단 부분 */}
         <div className="flex flex-col gap-4">
-          {/* 모바일에서는 세로로 배치되도록 변경 */}
-          <div className="flex flex-col gap-4">
-            {/* Card Color 선택기 */}
-            <div className="flex flex-col sm:flex-row items-start sm:items-center gap-2">
-              <label className="text-sm font-medium text-white min-w-[80px]">Card Color:</label>
-              <ColorPicker
-                value={backgroundColor}
-                onChange={setBackgroundColor}
-              />
-            </div>
-
-            {/* Background 선택기 */}
-            <div className="flex flex-col sm:flex-row items-start sm:items-center gap-2">
-              <label className="text-sm font-medium text-white min-w-[80px]">Background:</label>
-              <div className="w-full sm:w-auto">
-                <BackgroundPicker />
-              </div>
-            </div>
+          <div className="flex flex-col sm:flex-row items-start sm:items-center gap-2">
+            <label className="text-sm font-medium text-white min-w-[80px]">Card Color:</label>
+            <ColorPicker
+              value={backgroundColor}
+              onChange={setBackgroundColor}
+            />
           </div>
 
-          {/* 버튼들을 포함하는 하단 부분 */}
           <div className="flex flex-col sm:flex-row justify-center gap-4 mt-4">
             <Button
               onClick={handleAIEdit}
