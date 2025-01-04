@@ -16,7 +16,7 @@ export default function Index() {
       transition={{ duration: 0.5 }}
       className="p-6 md:p-8 lg:p-12 space-y-10"
     >
-      <RandomBackground />
+      {/* RandomBackground 컴포넌트 제거 */}
       <div className="text-center space-y-2 mb-10">
         <Heading>Poetry Studio</Heading>
         <Subtitle className="text-primary">Create and preserve your poetic expressions</Subtitle>

@@ -1,42 +1,39 @@
-import { useEffect, useState } from "react";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue
-} from "@/components/ui/select";
+// components/BackgroundPicker.tsx
+import { useState } from 'react';
+import { Menu } from 'lucide-react';
 import { Button } from "@/components/ui/button";
-import { BACKGROUND_OPTIONS, getRandomBackground } from "@/lib/constants";
-import { toast } from "@/components/ui/use-toast";
+import { useRandomBackground } from '@/hooks/useRandomBackground';
+import { BACKGROUND_OPTIONS } from '@/lib/constants';
+import { toast } from '@/components/ui/use-toast';
+import { useIsMobile } from '@/hooks/use-mobile';
 
-export function BackgroundPicker() {
-  const [selectedBackground, setSelectedBackground] = useState(() => {
-    return localStorage.getItem('background') || BACKGROUND_OPTIONS.Random;
-  });
+interface BackgroundPickerProps {
+  currentBackground: string;
+  onBackgroundChange: (background: string) => void;
+}
 
-  // 컴포넌트 마운트 시 저장된 배경 적용
-  useEffect(() => {
-    const savedBackground = localStorage.getItem('background');
-    if (savedBackground) {
-      applyBackground(savedBackground);
-    }
-  }, []);
+export function BackgroundPicker({ currentBackground, onBackgroundChange }: BackgroundPickerProps) {
+  const [isOpen, setIsOpen] = useState(false);
+  const [isRandom, setIsRandom] = useRandomBackground();
+  const isMobile = useIsMobile();
 
-  const applyBackground = (background: string) => {
-    const backgroundUrl = background === 'random' ? getRandomBackground() : background;
-    document.body.style.backgroundImage = `url(${backgroundUrl})`;
-  };
-
-  const handleApplyBackground = () => {
+  const handleBackgroundChange = (background: string) => {
     try {
-      applyBackground(selectedBackground);
-      localStorage.setItem('background', selectedBackground);
+      if (background === 'random') {
+        setIsRandom(true);
+        localStorage.setItem('isRandomBackground', 'true');
+      } else {
+        setIsRandom(false);
+        localStorage.setItem('isRandomBackground', 'false');
+        onBackgroundChange(background);
+      }
 
       toast({
         title: "배경 변경됨",
         description: "새로운 배경이 적용되었습니다.",
       });
+
+      setIsOpen(false);
     } catch (error) {
       console.error('Background change error:', error);
       toast({
@@ -47,30 +44,71 @@ export function BackgroundPicker() {
     }
   };
 
-  return (
-    <div className="flex flex-col sm:flex-row items-start sm:items-center gap-2 w-full">
-      <Select
-        value={selectedBackground}
-        onValueChange={setSelectedBackground}
-      >
-        <SelectTrigger className="w-full sm:w-[150px]">
-          <SelectValue placeholder="Select background" />
-        </SelectTrigger>
-        <SelectContent>
-          {Object.entries(BACKGROUND_OPTIONS).map(([name, path]) => (
-            <SelectItem key={name} value={path}>
-              <span>{name}</span>
-            </SelectItem>
-          ))}
-        </SelectContent>
-      </Select>
+  const content = (
+    <div className="space-y-4">
       <Button
-        onClick={handleApplyBackground}
-        variant="secondary"
-        className="w-full sm:w-auto"
+        variant="outline"
+        onClick={() => handleBackgroundChange('random')}
+        className="w-full"
       >
-        이 배경 사용하기
+        Random (Auto Change)
       </Button>
+      {Object.entries(BACKGROUND_OPTIONS).map(([name, path]) => (
+        name !== 'Random' && (
+          <Button
+            key={name}
+            variant="outline"
+            onClick={() => handleBackgroundChange(path)}
+            className="w-full"
+          >
+            {name}
+          </Button>
+        )
+      ))}
+    </div>
+  );
+
+  if (isMobile) {
+    return (
+      <div className="relative">
+        <Button
+          variant="ghost"
+          size="icon"
+          className="bg-gray-900/70"
+          onClick={() => setIsOpen(!isOpen)}
+        >
+          <Menu className="h-5 w-5" />
+        </Button>
+
+        {isOpen && (
+          <>
+            <div
+              className="fixed inset-0 bg-black/50 z-40"
+              onClick={() => setIsOpen(false)}
+            />
+
+            <div className="fixed bottom-0 left-0 right-0 bg-background p-6 rounded-t-2xl z-50 space-y-4">
+              <div className="flex justify-between items-center mb-4">
+                <h3 className="text-lg font-semibold">배경 선택</h3>
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={() => setIsOpen(false)}
+                >
+                  ✕
+                </Button>
+              </div>
+              {content}
+            </div>
+          </>
+        )}
+      </div>
+    );
+  }
+
+  return (
+    <div className="bg-gray-900/70 p-4 rounded-lg">
+      {content}
     </div>
   );
 }

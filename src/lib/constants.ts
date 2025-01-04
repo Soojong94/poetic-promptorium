@@ -1,6 +1,18 @@
+export const BACKGROUND_OPTIONS = {
+  'Background 1': '/background1.jpg',
+  'Background 2': '/background2.jpg',
+  'Background 3': '/background3.jpg',
+  'Background 4': '/background4.jpg',
+  'Background 5': '/background5.jpg',
+  'Background 6': '/background6.jpg',
+  'Background 7': '/background7.jpg',
+  'Background 8': '/background8.jpg',
+  'Background 9': '/background9.jpg',
+  'Background 10': '/background10.jpg',
+} as const;
+
 export const CARD_BACKGROUNDS = {
-  'Random': 'random',
-  'Slate Black': 'bg-slate-900/10',    // backdrop-blur 제거, 투명도 75%로 조정
+  'Slate Black': 'bg-slate-900/10',
   'Deep Ocean': 'bg-blue-900/15',
   'Dark Forest': 'bg-green-900/15',
   'Rich Purple': 'bg-purple-900/15',
@@ -20,20 +32,6 @@ export const CARD_BACKGROUNDS = {
   'Deep Space': 'bg-slate-950/15',
   'Dark Berry': 'bg-purple-950/15',
   'Rich Mahogany': 'bg-orange-950/15'
-} as const;
-
-export const BACKGROUND_OPTIONS = {
-  'Random': 'random',
-  'Background 1': '/background1.jpg',
-  'Background 2': '/background2.jpg',
-  'Background 3': '/background3.jpg',
-  'Background 4': '/background4.jpg',
-  'Background 5': '/background5.jpg',
-  'Background 6': '/background6.jpg',
-  'Background 7': '/background7.jpg',
-  'Background 8': '/background8.jpg',
-  'Background 9': '/background9.jpg',
-  'Background 10': '/background10.jpg',
 } as const;
 
 export const BACKGROUND_IMAGES = [
