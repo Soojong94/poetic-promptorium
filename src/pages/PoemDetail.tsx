@@ -147,9 +147,8 @@ export default function PoemDetail() {
   if (!poem) return null;
 
   return (
-    <div className={`p-6 md:p-8 lg:p-12 space-y-8 bg-background text-foreground ${
-      isMobile ? 'min-h-screen overflow-auto' : 'h-screen overflow-hidden'
-    }`}>
+    <div className={`p-6 md:p-8 lg:p-12 space-y-8 bg-background text-foreground ${isMobile ? 'min-h-screen overflow-auto' : 'h-screen overflow-hidden'
+      }`}>
       <PoemActions
         onBack={() => navigate(`/history?page=${page}`)}
         onEdit={() => setEditDialog(true)}
