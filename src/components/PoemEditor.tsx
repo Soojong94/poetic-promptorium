@@ -10,6 +10,8 @@ import type { Database } from "@/integrations/supabase/types";
 // import { enhancePoem } from "@/lib/huggingface";
 import { ColorPicker } from "@/components/ColorPicker";
 import { CARD_BACKGROUNDS } from "@/lib/constants";
+import { Upload } from 'lucide-react';
+import { uploadImage } from '@/lib/storage';
 
 type Poem = Database["public"]["Tables"]["poems"]["Row"];
 
@@ -20,6 +22,8 @@ export function PoemEditor() {
   const [isEditing, setIsEditing] = useState(false);
   const [poemId, setPoemId] = useState<string | null>(null);
   const [backgroundColor, setBackgroundColor] = useState<string>(Object.values(CARD_BACKGROUNDS)[0]);
+  const [imageUrl, setImageUrl] = useState<string>("");
+  const [isUploading, setIsUploading] = useState(false);
 
   // 임시 저장 함수
   const saveTemporaryPoem = useCallback(() => {
@@ -149,6 +153,39 @@ export function PoemEditor() {
   };
   */
 
+  const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    if (file.size > 5 * 1024 * 1024) { // 5MB 제한
+      toast({
+        title: "파일 크기 초과",
+        description: "5MB 이하의 이미지만 업로드 가능합니다.",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    try {
+      setIsUploading(true);
+      const url = await uploadImage(file);
+      setImageUrl(url);
+      toast({
+        title: "이미지 업로드 완료",
+        description: "이미지가 성공적으로 업로드되었습니다.",
+      });
+    } catch (error) {
+      toast({
+        title: "업로드 실패",
+        description: "이미지 업로드에 실패했습니다.",
+        variant: "destructive",
+      });
+    } finally {
+      setIsUploading(false);
+    }
+  };
+
+
   return (
     <motion.div
       initial={{ opacity: 0 }}
@@ -186,6 +223,46 @@ export function PoemEditor() {
               />
             </div>
           </div>
+          <div className="flex items-center gap-4">
+            <label className="text-sm font-medium text-white min-w-[80px]">Image:</label>
+            <div className="flex-1">
+              <div className="flex items-center gap-2">
+                <Button
+                  variant="outline"
+                  className="relative overflow-hidden"
+                  disabled={isUploading}
+                >
+                  <input
+                    type="file"
+                    className="absolute inset-0 opacity-0 cursor-pointer"
+                    accept="image/*"
+                    onChange={handleImageUpload}
+                  />
+                  <Upload className="w-4 h-4 mr-2" />
+                  {imageUrl ? "Change Image" : "Upload Image"}
+                </Button>
+                {imageUrl && (
+                  <Button
+                    variant="destructive"
+                    size="sm"
+                    onClick={() => setImageUrl("")}
+                  >
+                    Remove
+                  </Button>
+                )}
+              </div>
+            </div>
+          </div>
+
+          {imageUrl && (
+            <div className="mt-4">
+              <img
+                src={imageUrl}
+                alt="Uploaded"
+                className="max-h-48 rounded-lg object-cover"
+              />
+            </div>
+          )}
 
           <div className="flex gap-2">
             {/* 

@@ -10,6 +10,7 @@ interface PoemCardProps {
   backgroundColor: string;
   className?: string;
   onClick?: () => void;
+  imageUrl?: string;
 }
 
 export function PoemCard({
@@ -18,6 +19,7 @@ export function PoemCard({
   date,
   backgroundColor,
   className,
+  imageUrl,
   onClick
 }: PoemCardProps) {
   const formattedDate = format(new Date(date), "yyyy년 MM월 dd일 HH:mm:ss");
@@ -45,10 +47,25 @@ export function PoemCard({
         className
       )}
     >
-      <div className="relative z-10 bg-opacity-20"> {/* 내부 요소의 투명도도 조정 */}
-        <h3 className="text-lg font-medium mb-3 line-clamp-2 min-h-[3rem] transform-gpu text-white">{title}</h3>
-        <p className="text-base text-gray-200 line-clamp-3 min-h-[4.5rem] flex-grow transform-gpu">{content}</p>
-        <p className="text-sm text-gray-300 mt-3 transform-gpu">{formattedDate}</p>
+      <div className="relative z-10 bg-opacity-20">
+        <h3 className="text-lg font-medium mb-3 line-clamp-2 min-h-[3rem] transform-gpu text-white">
+          {title}
+        </h3>
+        <p className="text-base text-gray-200 line-clamp-3 min-h-[4.5rem] flex-grow transform-gpu">
+          {content}
+        </p>
+        {imageUrl && (
+          <div className="mt-4">
+            <img
+              src={imageUrl}
+              alt={title}
+              className="w-full h-32 object-cover rounded-lg"
+            />
+          </div>
+        )}
+        <p className="text-sm text-gray-300 mt-3 transform-gpu">
+          {formattedDate}
+        </p>
       </div>
     </motion.div>
   );
