@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { useNavigate, useParams, useLocation } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "@/components/ui/use-toast";
-import { enhancePoem } from "@/lib/huggingface";
+`import { enhancePoem } from "@/lib/huggingface"`
 import { DeleteAlert } from "@/components/DeleteAlert";
 import { EditPoemDialog } from "@/components/EditPoemDialog";
 import { CARD_BACKGROUNDS } from "@/lib/constants";
@@ -50,8 +50,17 @@ export default function PoemDetail() {
     }
   };
 
-  const handleAiEdit = async () => {
-    if (!poem) return;
+  // 함수 주석 처리
+  /* 
+  const handleAIEdit = async () => {
+    if (!content) {
+      toast({
+        title: "내용 없음",
+        description: "수정할 시 내용을 먼저 입력해주세요.",
+        variant: "destructive",
+      });
+      return;
+    }
 
     try {
       toast({
@@ -59,21 +68,9 @@ export default function PoemDetail() {
         description: "잠시만 기다려주세요.",
       });
 
-      const enhancedContent = await enhancePoem(poem.content);
+      const enhancedContent = await enhancePoem(content);
+      setContent(enhancedContent);
 
-      const { data, error } = await supabase
-        .from("poems")
-        .update({
-          content: enhancedContent,
-          updated_at: new Date().toISOString()
-        })
-        .eq("id", id)
-        .select()
-        .single();
-
-      if (error) throw error;
-
-      setPoem(data);
       toast({
         title: "AI 수정 완료",
         description: "시가 AI에 의해 수정되었습니다.",
@@ -82,11 +79,12 @@ export default function PoemDetail() {
       console.error("Error in AI edit:", error);
       toast({
         title: "에러",
-        description: "AI 수정 중 오류가 발생했습니다.",
+        description: error.message || "AI 수정 중 오류가 발생했습니다.",
         variant: "destructive",
       });
     }
   };
+  */
 
   const handleDelete = async () => {
     try {
@@ -152,7 +150,7 @@ export default function PoemDetail() {
       <PoemActions
         onBack={() => navigate(`/history?page=${page}`)}
         onEdit={() => setEditDialog(true)}
-        onAiEdit={handleAiEdit}
+        // onAiEdit={handleAiEdit}
         onDelete={() => setDeleteAlert(true)}
         page={page}
       />

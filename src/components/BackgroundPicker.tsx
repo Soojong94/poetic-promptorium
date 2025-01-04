@@ -2,7 +2,7 @@
 import { useState } from 'react';
 import { Menu } from 'lucide-react';
 import { Button } from "@/components/ui/button";
-import { useRandomBackground } from '@/hooks/useRandomBackground';
+// import { useRandomBackground } from '@/hooks/useRandomBackground';
 import { BACKGROUND_OPTIONS } from '@/lib/constants';
 import { toast } from '@/components/ui/use-toast';
 import { useIsMobile } from '@/hooks/use-mobile';
@@ -12,18 +12,18 @@ interface BackgroundPickerProps {
   onBackgroundChange: (background: string) => void;
 }
 
+// components/BackgroundPicker.tsx
 export function BackgroundPicker({ currentBackground, onBackgroundChange }: BackgroundPickerProps) {
   const [isOpen, setIsOpen] = useState(false);
-  const [isRandom, setIsRandom] = useRandomBackground();
-  const isMobile = useIsMobile();
+  // const [isRandom, setIsRandom] = useRandomBackground();
 
   const handleBackgroundChange = (background: string) => {
     try {
       if (background === 'random') {
-        setIsRandom(true);
+        //setIsRandom(true);
         localStorage.setItem('isRandomBackground', 'true');
       } else {
-        setIsRandom(false);
+        // setIsRandom(false);
         localStorage.setItem('isRandomBackground', 'false');
         onBackgroundChange(background);
       }
@@ -46,13 +46,7 @@ export function BackgroundPicker({ currentBackground, onBackgroundChange }: Back
 
   const content = (
     <div className="space-y-4">
-      <Button
-        variant="outline"
-        onClick={() => handleBackgroundChange('random')}
-        className="w-full"
-      >
-        Random (Auto Change)
-      </Button>
+      {/* Random 버튼 제거 */}
       {Object.entries(BACKGROUND_OPTIONS).map(([name, path]) => (
         name !== 'Random' && (
           <Button
@@ -68,47 +62,39 @@ export function BackgroundPicker({ currentBackground, onBackgroundChange }: Back
     </div>
   );
 
-  if (isMobile) {
-    return (
-      <div className="relative">
-        <Button
-          variant="ghost"
-          size="icon"
-          className="bg-gray-900/70"
-          onClick={() => setIsOpen(!isOpen)}
-        >
-          <Menu className="h-5 w-5" />
-        </Button>
-
-        {isOpen && (
-          <>
-            <div
-              className="fixed inset-0 bg-black/50 z-40"
-              onClick={() => setIsOpen(false)}
-            />
-
-            <div className="fixed bottom-0 left-0 right-0 bg-background p-6 rounded-t-2xl z-50 space-y-4">
-              <div className="flex justify-between items-center mb-4">
-                <h3 className="text-lg font-semibold">배경 선택</h3>
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  onClick={() => setIsOpen(false)}
-                >
-                  ✕
-                </Button>
-              </div>
-              {content}
-            </div>
-          </>
-        )}
-      </div>
-    );
-  }
-
   return (
-    <div className="bg-gray-900/70 p-4 rounded-lg">
-      {content}
+    <div className="relative">
+      <Button
+        variant="ghost"
+        size="icon"
+        className="bg-gray-900/70"
+        onClick={() => setIsOpen(!isOpen)}
+      >
+        <Menu className="h-5 w-5" />
+      </Button>
+
+      {isOpen && (
+        <>
+          <div
+            className="fixed inset-0 bg-black/50 z-40"
+            onClick={() => setIsOpen(false)}
+          />
+
+          <div className="fixed right-4 top-16 w-64 bg-background p-4 rounded-lg shadow-lg z-50 space-y-4">
+            <div className="flex justify-between items-center mb-4">
+              <h3 className="text-lg font-semibold">배경 선택</h3>
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={() => setIsOpen(false)}
+              >
+                ✕
+              </Button>
+            </div>
+            {content}
+          </div>
+        </>
+      )}
     </div>
   );
 }

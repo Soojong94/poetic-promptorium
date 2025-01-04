@@ -5,12 +5,12 @@ import { useNavigate } from "react-router-dom";
 interface PoemActionsProps {
   onBack: () => void;
   onEdit: () => void;
-  onAiEdit: () => void;
   onDelete: () => void;
   page: string;
+  // onAiEdit: () => void;  // 주석 처리
 }
 
-export function PoemActions({ onBack, onEdit, onAiEdit, onDelete, page }: PoemActionsProps) {
+export function PoemActions({ onBack, onEdit, onDelete, page }: PoemActionsProps) {
   const navigate = useNavigate();
 
   const handleBack = () => {
@@ -37,6 +37,7 @@ export function PoemActions({ onBack, onEdit, onAiEdit, onDelete, page }: PoemAc
             <Pencil className="w-4 h-4 mr-2" />
             수정
           </Button>
+          {/* 
           <Button
             variant="outline"
             onClick={onAiEdit}
@@ -45,6 +46,7 @@ export function PoemActions({ onBack, onEdit, onAiEdit, onDelete, page }: PoemAc
             <Wand2 className="w-4 h-4 mr-2" />
             AI 수정
           </Button>
+          */}
           <Button
             variant="destructive"
             onClick={onDelete}

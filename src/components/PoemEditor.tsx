@@ -7,7 +7,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { toast } from "@/components/ui/use-toast";
 import { supabase } from "@/integrations/supabase/client";
 import type { Database } from "@/integrations/supabase/types";
-import { enhancePoem } from "@/lib/huggingface";
+// import { enhancePoem } from "@/lib/huggingface";
 import { ColorPicker } from "@/components/ColorPicker";
 import { CARD_BACKGROUNDS } from "@/lib/constants";
 
@@ -115,7 +115,7 @@ export function PoemEditor() {
     }
   };
 
-  const handleAIEdit = async () => {
+  /* const handleAIEdit = async () => {
     if (!content) {
       toast({
         title: "내용 없음",
@@ -147,6 +147,7 @@ export function PoemEditor() {
       });
     }
   };
+  */
 
   return (
     <motion.div
@@ -175,33 +176,38 @@ export function PoemEditor() {
 
       <div className="space-y-6 bg-gray-900/70 p-6 rounded-lg">
         <div className="flex flex-col gap-4">
-          <div className="flex items-center justify-between gap-4">
-            <div className="flex items-center gap-2">
-              <label className="text-sm font-medium text-white min-w-[80px]">Card Color:</label>
+          {/* Card Color 선택 - 가로 배치 */}
+          <div className="flex items-center gap-4">
+            <label className="text-sm font-medium text-white min-w-[80px]">Card Color:</label>
+            <div className="flex-1">
               <ColorPicker
                 value={backgroundColor}
                 onChange={setBackgroundColor}
               />
             </div>
+          </div>
 
-            <div className="flex gap-2">
-              <Button
-                onClick={handleAIEdit}
-                variant="outline"
-                className="border-primary/50 hover:border-primary bg-transparent"
-              >
-                AI Edit
-              </Button>
-              <Button
-                onClick={handleSave}
-                className="text-primary-foreground bg-primary/80 hover:bg-primary"
-              >
-                {isEditing ? "Update Poem" : "Save Poem"}
-              </Button>
-            </div>
+          <div className="flex gap-2">
+            {/* 
+  <Button
+    onClick={handleAIEdit}
+    variant="outline"
+    className="border-primary/50 hover:border-primary bg-transparent"
+  >
+    AI Edit
+  </Button>
+  */}
+            {/* Save 버튼 */}
+            <Button
+              onClick={handleSave}
+              className="w-full text-primary-foreground bg-primary/80 hover:bg-primary"
+            >
+              {isEditing ? "Update Poem" : "Save Poem"}
+            </Button>
           </div>
         </div>
       </div>
-    </motion.div>
+
+    </motion.div >
   );
 }

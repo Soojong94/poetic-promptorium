@@ -11,28 +11,20 @@ import "./App.css";
 
 function App() {
   const [background, setBackground] = useState(() => {
-    const isRandomSaved = localStorage.getItem('isRandomBackground') === 'true';
-    if (isRandomSaved) {
-      return 'random';
-    }
-    return localStorage.getItem('background') || getRandomBackground();
+    return localStorage.getItem('background') || Object.values(BACKGROUND_OPTIONS)[0];
   });
 
   const handleBackgroundChange = (newBackground: string) => {
     setBackground(newBackground);
-    if (newBackground !== 'random') {
-      localStorage.setItem('background', newBackground);
-    }
+    localStorage.setItem('background', newBackground);
   };
 
   useEffect(() => {
-    if (background !== 'random') {
-      document.body.style.backgroundImage = `url(${background})`;
-      document.body.style.backgroundSize = 'cover';
-      document.body.style.backgroundPosition = 'center';
-      document.body.style.backgroundRepeat = 'no-repeat';
-      document.body.style.backgroundAttachment = 'fixed';
-    }
+    document.body.style.backgroundImage = `url(${background})`;
+    document.body.style.backgroundSize = 'cover';
+    document.body.style.backgroundPosition = 'center';
+    document.body.style.backgroundRepeat = 'no-repeat';
+    document.body.style.backgroundAttachment = 'fixed';
   }, [background]);
 
   return (

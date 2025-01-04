@@ -12,26 +12,26 @@ export const BACKGROUND_OPTIONS = {
 } as const;
 
 export const CARD_BACKGROUNDS = {
-  'Slate Black': 'bg-slate-900/10',
-  'Deep Ocean': 'bg-blue-900/15',
-  'Dark Forest': 'bg-green-900/15',
-  'Rich Purple': 'bg-purple-900/15',
-  'Wine Red': 'bg-red-900/15',
-  'Dark Amber': 'bg-amber-900/15',
-  'Royal Navy': 'bg-indigo-900/15',
-  'Deep Rose': 'bg-rose-900/15',
-  'Dark Teal': 'bg-teal-900/15',
-  'Coffee Brown': 'bg-brown-900/15',
-  'Dark Violet': 'bg-violet-900/15',
-  'Deep Crimson': 'bg-crimson-900/15',
-  'Dark Emerald': 'bg-emerald-900/15',
-  'Midnight Blue': 'bg-blue-950/15',
-  'Dark Bronze': 'bg-yellow-950/15',
-  'Deep Burgundy': 'bg-red-950/15',
-  'Dark Moss': 'bg-green-950/15',
-  'Deep Space': 'bg-slate-950/15',
-  'Dark Berry': 'bg-purple-950/15',
-  'Rich Mahogany': 'bg-orange-950/15'
+  'Slate Black': 'bg-slate-800',
+  'Deep Ocean': 'bg-blue-800',
+  'Dark Forest': 'bg-green-800',
+  'Rich Purple': 'bg-purple-800',
+  'Wine Red': 'bg-red-800',
+  'Dark Amber': 'bg-amber-800',
+  'Royal Navy': 'bg-indigo-800',
+  'Deep Rose': 'bg-rose-800',
+  'Dark Teal': 'bg-teal-800',
+  'Coffee Brown': 'bg-yellow-900',
+  'Dark Violet': 'bg-violet-800',
+  'Deep Crimson': 'bg-red-900',
+  'Dark Emerald': 'bg-emerald-800',
+  'Midnight Blue': 'bg-blue-900',
+  'Dark Bronze': 'bg-yellow-800',
+  'Deep Burgundy': 'bg-red-950',
+  'Dark Moss': 'bg-green-900',
+  'Deep Space': 'bg-slate-950',
+  'Dark Berry': 'bg-purple-900',
+  'Rich Mahogany': 'bg-orange-900'
 } as const;
 
 export const BACKGROUND_IMAGES = [
