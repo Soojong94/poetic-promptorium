@@ -111,7 +111,7 @@ export default function PoemDetail() {
     }
   };
 
-  const handleEdit = async (title: string, content: string, backgroundColor: string) => {
+  const handleEdit = async (title: string, content: string, backgroundColor: string, imageUrl: string) => {
     try {
       const { data, error } = await supabase
         .from("poems")
@@ -119,6 +119,7 @@ export default function PoemDetail() {
           title,
           content,
           background_color: backgroundColor,
+          image_url: imageUrl,  // 이미지 URL 추가
           updated_at: new Date().toISOString()
         })
         .eq("id", id)
@@ -159,6 +160,7 @@ export default function PoemDetail() {
         title={poem.title}
         content={poem.content}
         createdAt={poem.created_at}
+        imageUrl={poem.image_url}  // 이미지 URL 전달
       />
 
       <DeleteAlert
@@ -175,6 +177,7 @@ export default function PoemDetail() {
         initialTitle={poem.title}
         initialContent={poem.content}
         initialBackgroundColor={poem.background_color || Object.values(CARD_BACKGROUNDS)[0]}
+        initialImageUrl={poem.image_url}  // 이미지 URL 추가
       />
     </div>
   );

@@ -69,6 +69,7 @@ export function PoemEditor() {
     }
 
     try {
+      console.log('Saving poem with image URL:', imageUrl);
       if (isEditing && poemId) {
         const { error } = await supabase
           .from("poems")
@@ -76,6 +77,7 @@ export function PoemEditor() {
             title,
             content,
             background_color: backgroundColor,
+            image_url: imageUrl,  // 이미지 URL 추가
             updated_at: new Date().toISOString()
           })
           .eq("id", poemId);
@@ -90,7 +92,8 @@ export function PoemEditor() {
           .insert([{
             title,
             content,
-            background_color: backgroundColor
+            background_color: backgroundColor,
+            image_url: imageUrl  // 이미지 URL 추가
           }]);
         if (error) throw error;
         toast({
@@ -106,6 +109,7 @@ export function PoemEditor() {
       setTitle("");
       setContent("");
       setBackgroundColor(Object.values(CARD_BACKGROUNDS)[0]);
+      setImageUrl("");  // 이미지 URL 초기화 추가
 
       // 히스토리 페이지로 이동
       navigate('/history');
@@ -118,6 +122,7 @@ export function PoemEditor() {
       });
     }
   };
+
 
   /* const handleAIEdit = async () => {
     if (!content) {
@@ -167,6 +172,7 @@ export function PoemEditor() {
     }
 
     try {
+      console.log('Saving poem with image URL:', imageUrl);
       setIsUploading(true);
       const url = await uploadImage(file);
       setImageUrl(url);
@@ -175,6 +181,7 @@ export function PoemEditor() {
         description: "이미지가 성공적으로 업로드되었습니다.",
       });
     } catch (error) {
+      console.error('Error saving poem:', error);
       toast({
         title: "업로드 실패",
         description: "이미지 업로드에 실패했습니다.",

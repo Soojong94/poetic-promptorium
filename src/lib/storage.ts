@@ -3,27 +3,23 @@ import { v4 as uuidv4 } from 'uuid';
 
 export async function uploadImage(file: File) {
   try {
-    // 파일 확장자 추출
     const fileExt = file.name.split('.').pop();
-    // UUID를 사용하여 고유한 파일명 생성
     const fileName = `${uuidv4()}.${fileExt}`;
-    // 저장될 경로 설정
-    const filePath = `poems/${fileName}`;
 
-    // Supabase Storage에 파일 업로드
+    // filePath에서 'poems/' 제거하고 fileName만 사용
     const { error: uploadError } = await supabase.storage
       .from('poems')
-      .upload(filePath, file);
+      .upload(fileName, file);
 
     if (uploadError) {
       throw uploadError;
     }
 
-    // 업로드된 파일의 공개 URL 가져오기
     const { data: { publicUrl } } = supabase.storage
       .from('poems')
-      .getPublicUrl(filePath);
+      .getPublicUrl(fileName);
 
+    console.log('Uploaded image URL:', publicUrl);
     return publicUrl;
   } catch (error) {
     console.error('Error uploading image:', error);
@@ -33,14 +29,13 @@ export async function uploadImage(file: File) {
 
 export async function deleteImage(url: string) {
   try {
-    // URL에서 파일명 추출
-    const path = url.split('/').pop();
-    if (!path) return;
+    // URL에서 마지막 부분만 fileName으로 추출
+    const fileName = url.split('/').pop();
+    if (!fileName) return;
 
-    // Supabase Storage에서 파일 삭제
     const { error } = await supabase.storage
       .from('poems')
-      .remove([`poems/${path}`]);
+      .remove([fileName]);
 
     if (error) {
       throw error;
