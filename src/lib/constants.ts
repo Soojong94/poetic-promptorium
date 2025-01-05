@@ -1,14 +1,17 @@
+// src/lib/constants.ts
+const SUPABASE_URL = "https://ceptvxbkyatsyrpttwbj.supabase.co";
+
 export const BACKGROUND_OPTIONS = {
-  'Background 1': '/background1.jpg',
-  'Background 2': '/background2.jpg',
-  'Background 3': '/background3.jpg',
-  'Background 4': '/background4.jpg',
-  'Background 5': '/background5.jpg',
-  'Background 6': '/background6.jpg',
-  'Background 7': '/background7.jpg',
-  'Background 8': '/background8.jpg',
-  'Background 9': '/background9.jpg',
-  'Background 10': '/background10.jpg',
+  'Background 1': `${SUPABASE_URL}/storage/v1/object/public/poems/background/background1.jpg`,
+  'Background 2': `${SUPABASE_URL}/storage/v1/object/public/poems/background/background2.jpg`,
+  'Background 3': `${SUPABASE_URL}/storage/v1/object/public/poems/background/background3.jpg`,
+  'Background 4': `${SUPABASE_URL}/storage/v1/object/public/poems/background/background4.jpg`,
+  'Background 5': `${SUPABASE_URL}/storage/v1/object/public/poems/background/background5.jpg`,
+  'Background 6': `${SUPABASE_URL}/storage/v1/object/public/poems/background/background6.jpg`,
+  'Background 7': `${SUPABASE_URL}/storage/v1/object/public/poems/background/background7.jpg`,
+  'Background 8': `${SUPABASE_URL}/storage/v1/object/public/poems/background/background8.jpg`,
+  'Background 9': `${SUPABASE_URL}/storage/v1/object/public/poems/background/background9.jpg`,
+  'Background 10': `${SUPABASE_URL}/storage/v1/object/public/poems/background/background10.jpg`,
 } as const;
 
 export const CARD_BACKGROUNDS = {

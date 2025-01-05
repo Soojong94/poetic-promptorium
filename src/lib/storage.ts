@@ -45,3 +45,34 @@ export async function deleteImage(url: string) {
     throw error;
   }
 }
+
+export async function loadBackgroundImages() {
+  try {
+    const { data: backgroundList, error } = await supabase.storage
+      .from('poems')  // 'background' 대신 'poems' 사용
+      .list('background');  // 'background' 폴더 지정
+
+    if (error) {
+      console.error('Error listing backgrounds:', error);
+      throw error;
+    }
+
+    if (!backgroundList) {
+      console.log('No backgrounds found');
+      return [];
+    }
+
+    const urls = backgroundList.map(file => {
+      const { data: { publicUrl } } = supabase.storage
+        .from('poems')  // 'background' 대신 'poems' 사용
+        .getPublicUrl(`background/${file.name}`);  // 경로에 'background/' 추가
+      return publicUrl;
+    });
+
+    console.log('Loaded URLs:', urls);
+    return urls;
+  } catch (error) {
+    console.error('Error in loadBackgroundImages:', error);
+    throw error;
+  }
+}

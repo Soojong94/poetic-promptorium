@@ -1,32 +1,48 @@
 // components/BackgroundPicker.tsx
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Menu } from 'lucide-react';
 import { Button } from "@/components/ui/button";
-// import { useRandomBackground } from '@/hooks/useRandomBackground';
-import { BACKGROUND_OPTIONS } from '@/lib/constants';
 import { toast } from '@/components/ui/use-toast';
-import { useIsMobile } from '@/hooks/use-mobile';
+import { loadBackgroundImages } from '@/lib/storage';
 
 interface BackgroundPickerProps {
   currentBackground: string;
   onBackgroundChange: (background: string) => void;
 }
 
-// components/BackgroundPicker.tsx
 export function BackgroundPicker({ currentBackground, onBackgroundChange }: BackgroundPickerProps) {
   const [isOpen, setIsOpen] = useState(false);
-  // const [isRandom, setIsRandom] = useRandomBackground();
+  const [backgrounds, setBackgrounds] = useState<string[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    async function fetchBackgrounds() {
+      setIsLoading(true);
+      setError(null);
+      try {
+        const urls = await loadBackgroundImages();
+        console.log('Loaded background URLs:', urls); // 디버깅용
+        setBackgrounds(urls);
+      } catch (error) {
+        console.error('Error loading backgrounds:', error);
+        setError('배경 이미지를 불러오는데 실패했습니다.');
+        toast({
+          title: "배경 로딩 실패",
+          description: "배경 이미지를 불러오는데 실패했습니다.",
+          variant: "destructive",
+        });
+      } finally {
+        setIsLoading(false);
+      }
+    }
+
+    fetchBackgrounds();
+  }, []);
 
   const handleBackgroundChange = (background: string) => {
     try {
-      if (background === 'random') {
-        //setIsRandom(true);
-        localStorage.setItem('isRandomBackground', 'true');
-      } else {
-        // setIsRandom(false);
-        localStorage.setItem('isRandomBackground', 'false');
-        onBackgroundChange(background);
-      }
+      onBackgroundChange(background);
 
       toast({
         title: "배경 변경됨",
@@ -43,24 +59,6 @@ export function BackgroundPicker({ currentBackground, onBackgroundChange }: Back
       });
     }
   };
-
-  const content = (
-    <div className="space-y-4">
-      {/* Random 버튼 제거 */}
-      {Object.entries(BACKGROUND_OPTIONS).map(([name, path]) => (
-        name !== 'Random' && (
-          <Button
-            key={name}
-            variant="outline"
-            onClick={() => handleBackgroundChange(path)}
-            className="w-full"
-          >
-            {name}
-          </Button>
-        )
-      ))}
-    </div>
-  );
 
   return (
     <div className="relative">
@@ -91,7 +89,27 @@ export function BackgroundPicker({ currentBackground, onBackgroundChange }: Back
                 ✕
               </Button>
             </div>
-            {content}
+
+            {isLoading ? (
+              <div className="text-center py-4">로딩중...</div>
+            ) : error ? (
+              <div className="text-center py-4 text-red-500">{error}</div>
+            ) : backgrounds.length === 0 ? (
+              <div className="text-center py-4">사용 가능한 배경이 없습니다.</div>
+            ) : (
+              <div className="space-y-4">
+                {backgrounds.map((url, index) => (
+                  <Button
+                    key={url}
+                    variant="outline"
+                    onClick={() => handleBackgroundChange(url)}
+                    className="w-full"
+                  >
+                    {`Background ${index + 1}`}
+                  </Button>
+                ))}
+              </div>
+            )}
           </div>
         </>
       )}
