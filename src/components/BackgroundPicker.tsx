@@ -40,10 +40,26 @@ export function BackgroundPicker({ currentBackground, onBackgroundChange }: Back
     fetchBackgrounds();
   }, []);
 
-  const handleBackgroundChange = (background: string) => {
+  const handleBackgroundChange = async (background: string) => {
     try {
+      // 로딩 메시지 표시
+      toast({
+        title: "배경 이미지 로딩 중",
+        description: "잠시만 기다려주세요...",
+      });
+
+      // 이미지 로딩 처리
+      await new Promise((resolve, reject) => {
+        const img = new Image();
+        img.onload = resolve;
+        img.onerror = reject;
+        img.src = background;
+      });
+
+      // 배경 변경
       onBackgroundChange(background);
 
+      // 완료 메시지
       toast({
         title: "배경 변경됨",
         description: "새로운 배경이 적용되었습니다.",
