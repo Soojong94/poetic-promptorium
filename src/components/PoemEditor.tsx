@@ -12,6 +12,8 @@ import { ColorPicker } from "@/components/ColorPicker";
 import { CARD_BACKGROUNDS } from "@/lib/constants";
 import { Upload } from 'lucide-react';
 import { uploadImage } from '@/lib/storage';
+import { WritingAssistant } from "@/components/WritingAssistant";
+
 
 type Poem = Database["public"]["Tables"]["poems"]["Row"];
 
@@ -291,7 +293,7 @@ export function PoemEditor() {
           </div>
         </div>
       </div>
-
+      <WritingAssistant />
     </motion.div >
   );
 }
