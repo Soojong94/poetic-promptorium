@@ -1,3 +1,4 @@
+
 import { supabase } from '@/integrations/supabase/client';
 import { v4 as uuidv4 } from 'uuid';
 
@@ -6,7 +7,6 @@ export async function uploadImage(file: File) {
     const fileExt = file.name.split('.').pop();
     const fileName = `${uuidv4()}.${fileExt}`;
 
-    // filePath에서 'poems/' 제거하고 fileName만 사용
     const { error: uploadError } = await supabase.storage
       .from('poems')
       .upload(fileName, file);
@@ -29,7 +29,6 @@ export async function uploadImage(file: File) {
 
 export async function deleteImage(url: string) {
   try {
-    // URL에서 마지막 부분만 fileName으로 추출
     const fileName = url.split('/').pop();
     if (!fileName) return;
 
@@ -49,8 +48,8 @@ export async function deleteImage(url: string) {
 export async function loadBackgroundImages() {
   try {
     const { data: backgroundList, error } = await supabase.storage
-      .from('poems')  // 'background' 대신 'poems' 사용
-      .list('background');  // 'background' 폴더 지정
+      .from('poems')
+      .list();
 
     if (error) {
       console.error('Error listing backgrounds:', error);
@@ -64,8 +63,8 @@ export async function loadBackgroundImages() {
 
     const urls = backgroundList.map(file => {
       const { data: { publicUrl } } = supabase.storage
-        .from('poems')  // 'background' 대신 'poems' 사용
-        .getPublicUrl(`background/${file.name}`);  // 경로에 'background/' 추가
+        .from('poems')
+        .getPublicUrl(file.name);
       return publicUrl;
     });
 

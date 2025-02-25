@@ -6,57 +6,57 @@ export type Json =
   | { [key: string]: Json | undefined }
   | Json[]
 
-  export type Database = {
-    public: {
-      Tables: {
-        poems: {
-          Row: {
-            background_color: string | null
-            background_image: string | null
-            content: string
-            created_at: string
-            id: string
-            title: string
-            updated_at: string
-            image_url: string | null  // 추가된 부분
-          }
-          Insert: {
-            background_color?: string | null
-            background_image?: string | null
-            content: string
-            created_at?: string
-            id?: string
-            title: string
-            updated_at?: string
-            image_url?: string | null  // 추가된 부분
-          }
-          Update: {
-            background_color?: string | null
-            background_image?: string | null
-            content?: string
-            created_at?: string
-            id?: string
-            title?: string
-            updated_at?: string
-            image_url?: string | null  // 추가된 부분
-          }
-          Relationships: []
+export type Database = {
+  public: {
+    Tables: {
+      poems: {
+        Row: {
+          background_color: string | null
+          background_image: string | null
+          content: string
+          created_at: string
+          id: string
+          image_url: string | null
+          title: string
+          updated_at: string
         }
-      }
-      Views: {
-        [_ in never]: never
-      }
-      Functions: {
-        [_ in never]: never
-      }
-      Enums: {
-        [_ in never]: never
-      }
-      CompositeTypes: {
-        [_ in never]: never
+        Insert: {
+          background_color?: string | null
+          background_image?: string | null
+          content: string
+          created_at?: string
+          id?: string
+          image_url?: string | null
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          background_color?: string | null
+          background_image?: string | null
+          content?: string
+          created_at?: string
+          id?: string
+          image_url?: string | null
+          title?: string
+          updated_at?: string
+        }
+        Relationships: []
       }
     }
+    Views: {
+      [_ in never]: never
+    }
+    Functions: {
+      [_ in never]: never
+    }
+    Enums: {
+      [_ in never]: never
+    }
+    CompositeTypes: {
+      [_ in never]: never
+    }
   }
+}
 
 type PublicSchema = Database[Extract<keyof Database, "public">]
 
